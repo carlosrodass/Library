@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using CSharpFunctionalExtensions;
+using Library.Domain.Common;
+using MediatR;
 
 namespace Library.Application.Features.Book.Commands.CreateBook
 {

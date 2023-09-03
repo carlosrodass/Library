@@ -4,6 +4,7 @@ using Library.Persistence.DataBaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library.Persistence.Migrations
 {
     [DbContext(typeof(LibraryDatabaseContext))]
-    partial class LibraryDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230903003850_RemovingEnumsToChange")]
+    partial class RemovingEnumsToChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,15 +57,10 @@ namespace Library.Persistence.Migrations
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("StatusId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("StatusId");
 
                     b.ToTable("Books");
                 });
@@ -126,12 +124,7 @@ namespace Library.Persistence.Migrations
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
-                    b.Property<int>("StatusId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("StatusId");
 
                     b.ToTable("Libraries");
                 });
@@ -184,9 +177,6 @@ namespace Library.Persistence.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ResumeTypeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -194,74 +184,7 @@ namespace Library.Persistence.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("ResumeTypeId");
-
                     b.ToTable("Resumes");
-                });
-
-            modelBuilder.Entity("Library.Domain.ResumeType", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ResumeTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Chapter"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Full"
-                        });
-                });
-
-            modelBuilder.Entity("Library.Domain.Status", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Status");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Private"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Public"
-                        });
-                });
-
-            modelBuilder.Entity("Library.Domain.Book", b =>
-                {
-                    b.HasOne("Library.Domain.Status", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Library.Domain.KeyPoint", b =>
@@ -275,17 +198,6 @@ namespace Library.Persistence.Migrations
                     b.Navigation("Resume");
                 });
 
-            modelBuilder.Entity("Library.Domain.Library", b =>
-                {
-                    b.HasOne("Library.Domain.Status", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Status");
-                });
-
             modelBuilder.Entity("Library.Domain.Resume", b =>
                 {
                     b.HasOne("Library.Domain.Book", "Book")
@@ -294,15 +206,7 @@ namespace Library.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Library.Domain.ResumeType", "ResumeType")
-                        .WithMany()
-                        .HasForeignKey("ResumeTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Book");
-
-                    b.Navigation("ResumeType");
                 });
 
             modelBuilder.Entity("Library.Domain.Book", b =>

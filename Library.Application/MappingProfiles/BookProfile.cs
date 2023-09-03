@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Library.Application.Dtos.Book;
+using Library.Application.Features.Book.Commands.CreateBook;
+using Library.Application.Features.Book.Commands.UpdateBook;
 using Library.Domain;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,9 @@ namespace Library.Application.MappingProfiles
         {
             CreateMap<Book, GetAllBooksDto>();
             CreateMap<Book, GetBookDetailsDto>();
+
+            CreateMap<CreateBookCommand, Book>();
+            //CreateMap<UpdateBookCommand, Book>();
         }
 
     }
