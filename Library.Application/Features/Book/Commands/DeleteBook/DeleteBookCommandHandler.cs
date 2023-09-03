@@ -19,6 +19,7 @@ namespace Library.Application.Features.Book.Commands.DeleteBook
             var bookToDelete = await _bookRepository.GetByIdAsync(request.Id);
 
             await _bookRepository.DeleteAsync(bookToDelete);
+            await _bookRepository.SaveChangesAsync();
 
             return Unit.Value;
         }

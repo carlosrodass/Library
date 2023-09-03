@@ -29,6 +29,10 @@ namespace Library.Persistence.Repositories
 
         public async Task DeleteAsync(T entity)
         {
+            //_context.Entry(entity).State = EntityState.Modified;
+            //entity.IsDeleted = true;
+            //entity.DeletedAt = DateTime.UtcNow;
+
             _context.Remove(entity);
 
         }

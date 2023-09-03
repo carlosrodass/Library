@@ -1,7 +1,4 @@
 ﻿using Library.Domain.Common;
-
-
-
 namespace Library.Domain;
 
 public class Book : BaseEntity

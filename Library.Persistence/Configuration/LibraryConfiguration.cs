@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,8 @@ namespace Library.Persistence.Configuration
             //        });
 
             //This is an example of how to add validation rules at DB level
-            //builder.Property(q => q.Name)
-            //    .IsRequired()
-            //    .HasMaxLength(100);
+            //builder.Property(q => q.IsActive)
+            //    .HasDefaultValue(true);
 
             //Here you also define the relations beetween to entities rather be One-To-Many , One-To-One..
         }
