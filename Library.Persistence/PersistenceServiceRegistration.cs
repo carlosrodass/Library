@@ -1,16 +1,17 @@
-﻿using Library.Application.Contracts.Persistence;
-using Library.Persistence.DataBaseContext;
-using Library.Persistence.Repositories;
+﻿
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MyLibrary.Application.Contracts.Persistence;
+using MyLibrary.Persistence.DataBaseContext;
+using MyLibrary.Persistence.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.Persistence
+namespace MyLibrary.Persistence
 {
     public static class PersistenceServiceRegistration
     {
@@ -24,7 +25,7 @@ namespace Library.Persistence
             });
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.AddScoped<ILibraryBookRepository, LibraryBookRepository>();
+            services.AddScoped<ILibraryRepository, LibraryRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IKeyPointRepository, KeyPointRepository>();
             services.AddScoped<ILibraryBookRepository, LibraryBookRepository>();

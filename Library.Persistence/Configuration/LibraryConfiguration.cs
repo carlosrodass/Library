@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.Persistence.Configuration
+namespace MyLibrary.Persistence.Configuration
 {
-    public class LibraryConfiguration : IEntityTypeConfiguration<Library.Domain.Library>
+    public class LibraryConfiguration : IEntityTypeConfiguration<Domain.Models.Library>
     {
-        public void Configure(EntityTypeBuilder<Domain.Library> builder)
+        public void Configure(EntityTypeBuilder<Domain.Models.Library> builder)
         {
             //This is an example of how to seed database table
             //builder.HasData(

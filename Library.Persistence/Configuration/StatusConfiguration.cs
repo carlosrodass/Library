@@ -1,14 +1,14 @@
-﻿using Library.Domain;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions.Infrastructure;
+using MyLibrary.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.Persistence.Configuration
+namespace MyLibrary.Persistence.Configuration
 {
     public class StatusConfiguration : IEntityTypeConfiguration<Status>
     {

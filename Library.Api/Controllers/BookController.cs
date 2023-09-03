@@ -1,14 +1,15 @@
-﻿using Library.Application.Dtos.Book;
-using Library.Application.Features.Book.Commands.CreateBook;
-using Library.Application.Features.Book.Commands.DeleteBook;
-using Library.Application.Features.Book.Commands.UpdateBook;
-using Library.Application.Features.Book.Queries.GetAllBooks;
-using Library.Application.Features.Book.Queries.GetBookDetails;
+﻿
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyLibrary.Application.Dtos.Book;
+using MyLibrary.Application.Features.BookFeature.Commands.CreateBook;
+using MyLibrary.Application.Features.BookFeature.Commands.DeleteBook;
+using MyLibrary.Application.Features.BookFeature.Commands.UpdateBook;
+using MyLibrary.Application.Features.BookFeature.Queries.GetAllBooks;
+using MyLibrary.Application.Features.BookFeature.Queries.GetBookDetails;
 
-namespace Library.Api.Controllers
+namespace MyLibrary.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

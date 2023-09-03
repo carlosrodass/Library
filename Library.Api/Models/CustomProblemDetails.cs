@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Library.Api.Models
+namespace MyLibrary.Api.Models
 {
     public class CustomProblemDetails : ProblemDetails
     {

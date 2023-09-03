@@ -1,6 +1,6 @@
-﻿using Library.Domain;
-using Library.Domain.Common;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using MyLibrary.Domain.Common;
+using MyLibrary.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +8,14 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.Persistence.DataBaseContext
+namespace MyLibrary.Persistence.DataBaseContext
 {
     public class LibraryDatabaseContext : DbContext
     {
 
         public LibraryDatabaseContext(DbContextOptions<LibraryDatabaseContext> options) : base(options) { }
 
-        public DbSet<Library.Domain.Library> Libraries { get; set; }
+        public DbSet<Domain.Models.Library> Libraries { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<KeyPoint> KeyPoints { get; set; }
         public DbSet<LibraryBook> LibraryBooks { get; set; }
@@ -53,7 +53,6 @@ namespace Library.Persistence.DataBaseContext
             UpdateSoftDeleteStatuses();
             return base.SaveChangesAsync(cancellationToken);
         }
-
         private void UpdateAuditableStatuses()
         {
             foreach (var entry in base.ChangeTracker.Entries<BaseEntity>()

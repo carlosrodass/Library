@@ -1,7 +1,7 @@
-﻿using Library.Domain;
+﻿using MyLibrary.Domain.Models;
 
 
-namespace Library.Application.Contracts.Persistence
+namespace MyLibrary.Application.Contracts.Persistence
 {
     public interface IResumeRepository : IGenericRepository<Resume>
     {

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Library.Api.Models;
-using Library.Application.Exceptions;
+using MyLibrary.Api.Models;
+using MyLibrary.Application.Exceptions;
 using System.Net;
 
-namespace Library.Api.Middleware;
+namespace MyLibrary.Api.Middleware;
 
 public class ExceptionMiddleware
 {

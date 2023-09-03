@@ -1,14 +1,15 @@
-﻿using Library.Application.Contracts.Logging;
-using Library.Infrastructure.Logging;
+﻿
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MyLibrary.Application.Contracts.Logging;
+using MyLibrary.Infrastructure.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.Infrastructure
+namespace MyLibrary.Infrastructure
 {
     public static class InfrastructureServicesRegistration
     {

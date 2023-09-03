@@ -1,21 +1,21 @@
-﻿using Library.Application.Contracts.Persistence;
-using Library.Domain;
-using Library.Domain.Common;
-using Library.Persistence.DataBaseContext;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using MyLibrary.Application.Contracts.Persistence;
+using MyLibrary.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.Persistence.Repositories
+namespace MyLibrary.Persistence.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
-        protected readonly LibraryDatabaseContext _context;
+        protected readonly DbContext _context;
+        protected DbSet<T> Entities => _context.Set<T>();
 
-        public GenericRepository(LibraryDatabaseContext context)
+        public GenericRepository(DbContext context)
         {
             this._context = context;
         }
@@ -23,36 +23,33 @@ namespace Library.Persistence.Repositories
         public async Task CreateAsync(T entity)
         {
             await _context.AddAsync(entity);
-
         }
-
 
         public async Task DeleteAsync(T entity)
         {
-            //_context.Entry(entity).State = EntityState.Modified;
-            //entity.IsDeleted = true;
-            //entity.DeletedAt = DateTime.UtcNow;
-
             _context.Remove(entity);
-
         }
 
-        public async Task<IReadOnlyList<T>> GetAsync()
+        public async Task<IReadOnlyList<T>> GetAsync(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
-            return await _context.Set<T>().AsNoTracking().ToListAsync();
-
+            var query = GetQuery(includes);
+            return await query.ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(int id, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
-            return await _context.Set<T>().
-                AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            var query = GetQuery(includes);
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task UpdateAsync(T entity)
         {
-            //_context.Update(entity);
             _context.Entry(entity).State = EntityState.Modified;
+        }
+
+        public async Task AddRange(List<T> values)
+        {
+            await _context.AddRangeAsync(values);
         }
 
         public async Task SaveChangesAsync()
@@ -61,9 +58,16 @@ namespace Library.Persistence.Repositories
         }
 
 
-        public async Task AddRange(List<T> values)
+
+        public virtual IQueryable<T> GetQuery(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes)
         {
-            await _context.AddRangeAsync(values);
+            IQueryable<T> query = Entities.AsNoTracking();
+
+            if (includes != null)
+            {
+                query = includes(query);
+            }
+            return query;
         }
     }
 }

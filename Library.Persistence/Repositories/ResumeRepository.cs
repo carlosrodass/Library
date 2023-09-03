@@ -1,9 +1,9 @@
-﻿using Library.Application.Contracts.Persistence;
-using Library.Domain;
-using Library.Persistence.DataBaseContext;
+﻿
+using MyLibrary.Application.Contracts.Persistence;
+using MyLibrary.Domain.Models;
+using MyLibrary.Persistence.DataBaseContext;
 
-
-namespace Library.Persistence.Repositories
+namespace MyLibrary.Persistence.Repositories
 {
     public class ResumeRepository : GenericRepository<Resume>, IResumeRepository
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.Application.Contracts.Logging
+namespace MyLibrary.Application.Contracts.Logging
 {
     public interface IAppLogger<T>
     {

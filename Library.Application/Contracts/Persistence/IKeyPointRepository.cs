@@ -1,7 +1,9 @@
-﻿using Library.Domain;
+﻿
 
 
-namespace Library.Application.Contracts.Persistence
+using MyLibrary.Domain.Models;
+
+namespace MyLibrary.Application.Contracts.Persistence
 {
     public interface IKeyPointRepository : IGenericRepository<KeyPoint>
     {

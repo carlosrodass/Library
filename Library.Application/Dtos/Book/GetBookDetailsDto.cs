@@ -1,6 +1,7 @@
-﻿using Library.Domain;
+﻿
+using MyLibrary.Application.Dtos.Common;
 
-namespace Library.Application.Dtos.Book
+namespace MyLibrary.Application.Dtos.Book
 {
     public class GetBookDetailsDto
     {
@@ -12,8 +13,10 @@ namespace Library.Application.Dtos.Book
         public DateTime ReleaseDate { get; set; }
         public string Image { get; set; }
         public int Order { get; set; }
+        public int StatusId { get; set; }
+        public EnumerationDto Status { get; set; }
+
         //public IEnumerable<ResumeDto> Resumes { get; set; }
-        //public StatusDto Status { get; set; }
     }
 
 }

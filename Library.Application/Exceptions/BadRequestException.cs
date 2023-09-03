@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Results;
 
-namespace Library.Application.Exceptions
+namespace MyLibrary.Application.Exceptions
 {
     public class BadRequestException : Exception
     {

@@ -1,6 +1,8 @@
-﻿namespace Library.Application.Contracts.Persistence
+﻿using MyLibrary.Domain.Models;
+
+namespace MyLibrary.Application.Contracts.Persistence
 {
-    public interface ILibraryRepository : IGenericRepository<Library.Domain.Library>
+    public interface ILibraryRepository : IGenericRepository<Library>
     {
 
     }

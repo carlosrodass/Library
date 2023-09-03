@@ -1,12 +1,12 @@
-﻿using Library.Application.Contracts.Logging;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using MyLibrary.Application.Contracts.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.Infrastructure.Logging
+namespace MyLibrary.Infrastructure.Logging
 {
     public class AppLogger<T> : IAppLogger<T>
     {

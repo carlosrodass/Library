@@ -1,7 +1,8 @@
-using Library.Api.Middleware;
-using Library.Application;
-using Library.Infrastructure;
-using Library.Persistence;
+
+using MyLibrary.Api.Middleware;
+using MyLibrary.Application;
+using MyLibrary.Infrastructure;
+using MyLibrary.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
