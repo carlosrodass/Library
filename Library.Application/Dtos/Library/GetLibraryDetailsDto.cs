@@ -1,4 +1,6 @@
-﻿using MyLibrary.Application.Dtos.Common;
+﻿using MyLibrary.Application.Dtos.Book;
+using MyLibrary.Application.Dtos.Common;
+using MyLibrary.Application.Dtos.LibraryBook;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +18,7 @@ namespace MyLibrary.Application.Dtos.Library
         public int Order { get; set; }
         public EnumerationDto Status { get; set; }
         public int StatusId { get; set; }
+        public List<LibraryBookDto> LibraryBooks { get; set; }
 
     }
 }

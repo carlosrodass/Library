@@ -17,9 +17,8 @@
     <ProjectReference Include="..\Library.Domain\MyLibrary.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\KeyPoint\" />
-    <Folder Include="Features\LibraryFeature\Commands\DeleteLibrary\" />
-    <Folder Include="Features\Resume\" />
+    <Folder Include="Features\KeyPointFeature\" />
+    <Folder Include="Features\ResumeFeature\" />
   </ItemGroup>
 
 

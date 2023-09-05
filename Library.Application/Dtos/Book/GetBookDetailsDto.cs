@@ -1,5 +1,6 @@
 ﻿
 using MyLibrary.Application.Dtos.Common;
+using MyLibrary.Application.Dtos.LibraryBook;
 
 namespace MyLibrary.Application.Dtos.Book
 {
@@ -15,7 +16,7 @@ namespace MyLibrary.Application.Dtos.Book
         public int Order { get; set; }
         public int StatusId { get; set; }
         public EnumerationDto Status { get; set; }
-
+        public List<LibraryBookDto> LibraryBooks { get; set; }
         //public IEnumerable<ResumeDto> Resumes { get; set; }
     }
 

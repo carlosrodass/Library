@@ -33,7 +33,8 @@ namespace MyLibrary.Application.Features.LibraryFeature.Queries.GetLibraryDetail
         private Func<IQueryable<Library>, IIncludableQueryable<Library, object>> GetIncludes()
         {
             return includes => includes
-                .Include(b => b.Status);
+                .Include(b => b.Status)
+                .Include(b => b.LibraryBooks).ThenInclude(x => x.Book);
         }
     }
 }

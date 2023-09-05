@@ -12,6 +12,7 @@ namespace MyLibrary.Domain.Models
         public int Order { get; set; }
         public Status Status { get; set; }
         public int StatusId { get; set; }
+        public List<LibraryBook> LibraryBooks { get; set; }
 
         //public User User { get; set; }
 

@@ -5,6 +5,7 @@ namespace MyLibrary.Application.Features.BookFeature.Commands.CreateBook
 {
     public class CreateBookCommand : IRequest<int>
     {
+        public int Id { get; set; }
         public string Title { get; set; }
         public string AuthorName { get; set; }
         public string Isbn { get; set; }
