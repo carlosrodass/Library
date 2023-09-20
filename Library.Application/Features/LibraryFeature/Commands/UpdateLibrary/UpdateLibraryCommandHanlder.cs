@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using MyLibrary.Application.Contracts.Persistence;
+using MyLibrary.Application.Exceptions;
 using MyLibrary.Domain.Models;
 
 namespace MyLibrary.Application.Features.LibraryFeature.Commands.UpdateLibrary;
@@ -17,14 +18,14 @@ public class UpdateLibraryCommandHanlder : IRequestHandler<UpdateLibraryCommand,
     }
     public async Task<int> Handle(UpdateLibraryCommand request, CancellationToken cancellationToken)
     {
-        //TODO: Add Validator 
-        //TODO: Add exception handler
+        var library = await _libraryRepository.GetByIdAsync(request.Id);
+        if (library == null) { throw new NotFoundException("library", request.Id); }
 
-        var update = _mapper.Map<Library>(request);
+        library.Update(request.Name, request.Description, request.Image);
 
-        await _libraryRepository.UpdateAsync(update);
+        await _libraryRepository.UpdateAsync(library);
         await _libraryRepository.SaveChangesAsync();
 
-        return update.Id;
+        return library.Id;
     }
 }

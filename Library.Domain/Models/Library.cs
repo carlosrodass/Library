@@ -1,4 +1,5 @@
 ﻿using MyLibrary.Domain.Common;
+using System.Diagnostics;
 
 namespace MyLibrary.Domain.Models
 {
@@ -18,7 +19,13 @@ namespace MyLibrary.Domain.Models
 
         //public int UserId { get; set; }
 
-
+        public Library Update(string name, string description, string image)
+        {
+            Name = name;
+            Description = description;
+            Image = image;
+            return this;
+        }
     }
 
 }

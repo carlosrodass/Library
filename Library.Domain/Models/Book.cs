@@ -1,5 +1,5 @@
 ﻿using MyLibrary.Domain.Common;
-
+using System.Reflection.Metadata;
 
 namespace MyLibrary.Domain.Models
 {
@@ -20,5 +20,20 @@ namespace MyLibrary.Domain.Models
         //public User User { get; set; }
 
         //public int UserId { get; set; }
+
+        public Book Update(string title, string authorName, string isbn, long price, DateTime releaseDate, string image, int order, int statusId)
+        {
+            Title = title;
+            AuthorName = authorName;
+            Isbn = isbn;
+            Price = price;
+            ReleaseDate = releaseDate;
+            Image = image;
+            Order = order;
+            StatusId = statusId;
+
+            return this;
+        }
+
     }
 }

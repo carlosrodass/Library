@@ -18,6 +18,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\KeyPointFeature\" />
+    <Folder Include="Features\MasterFeature\Queries\GetAllResumeType\" />
   </ItemGroup>
 
 

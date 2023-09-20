@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using MyLibrary.Application.Contracts.Persistence;
+using MyLibrary.Application.Exceptions;
 using MyLibrary.Domain.Models;
 
 namespace MyLibrary.Application.Features.BookFeature.Commands.UpdateBook
@@ -17,13 +18,14 @@ namespace MyLibrary.Application.Features.BookFeature.Commands.UpdateBook
         }
         public async Task<int> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
         {
-            //TODO: Add Validator 
-            //TODO: Add exception handler
+            var book = await _bookRepository.GetByIdAsync(request.Id);
+            if (book == null) { throw new NotFoundException("Book", request.Id); }
 
-            var bookToUpdate = _mapper.Map<Book>(request);
-            await _bookRepository.UpdateAsync(bookToUpdate);
+            book.Update(request.Title, request.AuthorName, request.Isbn, request.price, request.ReleaseDate, request.Image, request.Order, request.StatusId);
+
+            await _bookRepository.UpdateAsync(book);
             await _bookRepository.SaveChangesAsync();
-            return bookToUpdate.Id;
+            return book.Id;
         }
     }
 }
