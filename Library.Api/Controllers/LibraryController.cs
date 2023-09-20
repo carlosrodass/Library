@@ -4,6 +4,7 @@ using MyLibrary.Application.Dtos.Library;
 using MyLibrary.Application.Features.LibraryFeature.Commands.AddBooksToLibrary;
 using MyLibrary.Application.Features.LibraryFeature.Commands.CreateLibrary;
 using MyLibrary.Application.Features.LibraryFeature.Commands.DeleteLibrary;
+using MyLibrary.Application.Features.LibraryFeature.Commands.RemoveBooksFromLibrary;
 using MyLibrary.Application.Features.LibraryFeature.Commands.UpdateLibrary;
 using MyLibrary.Application.Features.LibraryFeature.Queries.GetAllLibraries;
 using MyLibrary.Application.Features.LibraryFeature.Queries.GetLibraryDetails;
@@ -77,14 +78,25 @@ namespace MyLibrary.Api.Controllers
             return NoContent();
         }
 
-        [HttpPost("AddBooks")]
+        [HttpPost("AddLibraryBooks")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<GetLibraryDetailsDto>> AddBooks([FromBody] AddBooksToLibraryCommand addBooksToLibraryCommand)
+        public async Task<ActionResult<GetLibraryDetailsDto>> AddBooksToLibrary([FromBody] AddBooksToLibraryCommand addBooksToLibraryCommand)
         {
 
             var result = await _mediator.Send(addBooksToLibraryCommand);
+            return Ok(result);
+        }
+
+        [HttpPost("RemoveLibraryBooks")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<GetLibraryDetailsDto>> RemoveBooksFromLibrary([FromBody] RemoveBooksFromLibraryCommand removeBooksFromLibraryCommand)
+        {
+
+            var result = await _mediator.Send(removeBooksFromLibraryCommand);
             return Ok(result);
         }
 

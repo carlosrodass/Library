@@ -10,10 +10,15 @@ namespace MyLibrary.Application.Features.LibraryFeature.Commands.AddBooksToLibra
 {
     public class AddBooksToLibraryCommandHandler : IRequestHandler<AddBooksToLibraryCommand, GetLibraryDetailsDto>
     {
+        #region Fields
+
         private readonly ILibraryRepository _libraryRepository;
         private ILibraryBookRepository _libraryBookRepository;
         private IBookRepository _bookRepository;
         private readonly IMapper _mapper;
+        #endregion
+
+        #region Builder
 
         public AddBooksToLibraryCommandHandler(ILibraryRepository libraryRepository,
                                                 ILibraryBookRepository libraryBookRepository,
@@ -26,19 +31,18 @@ namespace MyLibrary.Application.Features.LibraryFeature.Commands.AddBooksToLibra
             this._mapper = mapper;
         }
 
+        #endregion
+
+        #region Public method
 
         public async Task<GetLibraryDetailsDto> Handle(AddBooksToLibraryCommand request, CancellationToken cancellationToken)
         {
 
             var resultLibrary = await GetLibrary(request.Id);
 
-            var booksWithIds = request.Books.Where(x => x.Id != 0);
-            var bookWithoutIds = request.Books.Where(x => x.Id == 0);
-
             List<Book> booksToAddtoLibrary = new List<Book>();
 
-            await CheckBooksWithIds(booksWithIds, booksToAddtoLibrary);
-            await CreateBooksWithoutIds(bookWithoutIds, booksToAddtoLibrary);
+            await CheckAndCreateBooksByIds(request.Books, booksToAddtoLibrary);
             await CreateLibraryBook(request.Id, booksToAddtoLibrary);
 
             await _libraryRepository.UpdateAsync(resultLibrary);
@@ -47,6 +51,7 @@ namespace MyLibrary.Application.Features.LibraryFeature.Commands.AddBooksToLibra
             return _mapper.Map<GetLibraryDetailsDto>(resultLibrary);
         }
 
+        #endregion
 
         #region Private methods
         private async Task CreateLibraryBook(int libraryId, List<Book> booksToAddtoLibrary)
@@ -66,6 +71,14 @@ namespace MyLibrary.Application.Features.LibraryFeature.Commands.AddBooksToLibra
             await _libraryBookRepository.AddRange(libraryBooks);
             await _libraryBookRepository.SaveChangesAsync();
         }
+        private async Task CheckAndCreateBooksByIds(List<UpdateBookCommand> books, List<Book> booksToAddtoLibrary)
+        {
+            var booksWithIds = books.Where(x => x.Id != 0);
+            var bookWithoutIds = books.Where(x => x.Id == 0);
+
+            await CheckBooksWithIds(booksWithIds, booksToAddtoLibrary);
+            await CreateBooksWithoutIds(bookWithoutIds, booksToAddtoLibrary);
+        }
         private async Task CheckBooksWithIds(IEnumerable<UpdateBookCommand> booksWithIds, List<Book> booksToAddtoLibrary)
         {
 
@@ -74,7 +87,6 @@ namespace MyLibrary.Application.Features.LibraryFeature.Commands.AddBooksToLibra
                 var resultCheckBook = await _bookRepository.GetByIdAsync(bookToCheck.Id);
                 if (resultCheckBook == null) { throw new NotFoundException("Book", bookToCheck.Id); }
                 booksToAddtoLibrary.Add(resultCheckBook);
-                //booksToAddtoLibrary.Add(_mapper.Map<Book>(bookToCheck));
             }
         }
         private async Task CreateBooksWithoutIds(IEnumerable<UpdateBookCommand> bookWithoutIds, List<Book> booksToAddtoLibrary)

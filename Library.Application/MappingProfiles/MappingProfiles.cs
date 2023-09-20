@@ -3,10 +3,13 @@ using MyLibrary.Application.Dtos.Book;
 using MyLibrary.Application.Dtos.Common;
 using MyLibrary.Application.Dtos.Library;
 using MyLibrary.Application.Dtos.LibraryBook;
+using MyLibrary.Application.Dtos.Resume;
 using MyLibrary.Application.Features.BookFeature.Commands.CreateBook;
 using MyLibrary.Application.Features.BookFeature.Commands.UpdateBook;
 using MyLibrary.Application.Features.LibraryFeature.Commands.CreateLibrary;
 using MyLibrary.Application.Features.LibraryFeature.Commands.UpdateLibrary;
+using MyLibrary.Application.Features.ResumeFeature.Commands.CreateResume;
+using MyLibrary.Application.Features.ResumeFeature.Commands.UpdateResume;
 using MyLibrary.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -23,10 +26,12 @@ namespace MyLibrary.Application.MappingProfiles
             CommonProfile();
             BookProfile();
             LibraryProfile();
+            ResumeProfile();
         }
         private void CommonProfile()
         {
             CreateMap<Status, EnumerationDto>();
+            CreateMap<ResumeType, EnumerationDto>();
         }
         private void BookProfile()
         {
@@ -47,8 +52,13 @@ namespace MyLibrary.Application.MappingProfiles
 
             CreateMap<LibraryBook, LibraryBookDto>();
         }
+        private void ResumeProfile()
+        {
+            CreateMap<Resume, GetResumeDetailsDto>();
+            CreateMap<Resume, GetAllResumesDto>();
 
-
-
+            CreateMap<CreateResumeCommand, Resume>();
+            CreateMap<UpdateResumeCommand, Resume>();
+        }
     }
 }

@@ -5,7 +5,6 @@ using MyLibrary.Domain.Common;
 namespace MyLibrary.Domain.Models
 {
 
-
     public class Resume : BaseEntity
     {
         public string Title { get; set; }
@@ -17,6 +16,21 @@ namespace MyLibrary.Domain.Models
         public int BookId { get; set; }
         public IEnumerable<KeyPoint> KeyPoints { get; set; }
 
+
+        public async Task<Resume> Update(string title, string description, string content)
+        {
+            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(content)) { throw new Exception("Data not provided"); }
+
+            Title = title;
+            Description = description;
+            Content = content;
+
+            return this;
+        }
+
     }
+
+
+
 
 }
