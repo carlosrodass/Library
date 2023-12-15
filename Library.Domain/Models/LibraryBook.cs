@@ -5,10 +5,17 @@ namespace MyLibrary.Domain.Models
 {
     public class LibraryBook : BaseEntity
     {
-        public int LibraryId { get; set; }
+        public long LibraryId { get; set; }
         public Library Library { get; set; }
-        public int BookId { get; set; }
+        public long BookId { get; set; }
         public Book Book { get; set; }
+
+        private LibraryBook(long libraryId, long bookId)
+        {
+            LibraryId = libraryId;
+            BookId = bookId;
+        }
+
     }
 }
 

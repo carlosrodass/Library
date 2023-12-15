@@ -13,6 +13,7 @@ namespace MyLibrary.Persistence.Configuration
     {
         public void Configure(EntityTypeBuilder<Domain.Models.Library> builder)
         {
+            builder.HasKey(e => e.Id);
             //This is an example of how to seed database table
             //builder.HasData(
             //        new Library.Domain.Library

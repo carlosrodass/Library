@@ -8,8 +8,6 @@ using MyLibrary.Application.Features.BookFeature.Commands.CreateBook;
 using MyLibrary.Application.Features.BookFeature.Commands.UpdateBook;
 using MyLibrary.Application.Features.LibraryFeature.Commands.CreateLibrary;
 using MyLibrary.Application.Features.LibraryFeature.Commands.UpdateLibrary;
-using MyLibrary.Application.Features.ResumeFeature.Commands.CreateResume;
-using MyLibrary.Application.Features.ResumeFeature.Commands.UpdateResume;
 using MyLibrary.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -57,8 +55,6 @@ namespace MyLibrary.Application.MappingProfiles
             CreateMap<Resume, GetResumeDetailsDto>();
             CreateMap<Resume, GetAllResumesDto>();
 
-            CreateMap<CreateResumeCommand, Resume>();
-            CreateMap<UpdateResumeCommand, Resume>();
         }
     }
 }

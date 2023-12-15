@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Domain.Common
 {
-    public class CustomErrors
+    public abstract class CustomErrors
     {
 
         public static class Book

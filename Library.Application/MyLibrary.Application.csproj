@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="CSharpFunctionalExtensions" Version="2.40.0" />
+    <PackageReference Include="CSharpFunctionalExtensions" Version="2.40.3" />
     <PackageReference Include="FluentValidation" Version="11.7.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />
     <PackageReference Include="MediatR" Version="12.1.1" />
@@ -19,6 +19,11 @@
   <ItemGroup>
     <Folder Include="Features\KeyPointFeature\" />
     <Folder Include="Features\MasterFeature\Queries\GetAllResumeType\" />
+    <Folder Include="Features\ResumeFeature\Commands\CreateResume\" />
+    <Folder Include="Features\ResumeFeature\Commands\DeleteResume\" />
+    <Folder Include="Features\ResumeFeature\Commands\UpdateResume\" />
+    <Folder Include="Features\ResumeFeature\Queries\GetAllResumes\" />
+    <Folder Include="Features\ResumeFeature\Queries\GetResumeDetails\" />
   </ItemGroup>
 
 

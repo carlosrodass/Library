@@ -8,6 +8,7 @@ namespace MyLibrary.Application.Dtos.Library
 {
     public class GetAllLibrariesDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }

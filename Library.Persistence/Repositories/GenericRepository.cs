@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Query;
 using MyLibrary.Application.Contracts.Persistence;
 using MyLibrary.Domain.Common;
+using MyLibrary.Domain.Models.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Persistence.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+    public class GenericRepository<T> : IGenericRepository<T> where T : AggregateRoot
     {
         protected readonly DbContext _context;
         protected DbSet<T> Entities => _context.Set<T>();
@@ -36,10 +37,17 @@ namespace MyLibrary.Persistence.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
+        public async Task<T> GetByIdAsync(long id, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
             var query = GetQuery(includes);
             return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<T>> GetByIdsAsync(IEnumerable<long> ids, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
+        {
+            var query = GetQuery(includes);
+
+            return await query.Where(entity => ids.Contains(entity.Id)).ToListAsync();
         }
 
         public async Task UpdateAsync(T entity)

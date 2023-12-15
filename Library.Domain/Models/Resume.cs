@@ -13,7 +13,7 @@ namespace MyLibrary.Domain.Models
         public ResumeType ResumeType { get; set; }
         public int ResumeTypeId { get; set; }
         public Book Book { get; set; }
-        public int BookId { get; set; }
+        public long BookId { get; set; }
         public IEnumerable<KeyPoint> KeyPoints { get; set; }
 
 

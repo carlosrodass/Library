@@ -33,6 +33,7 @@ public class GetBookDetailsQueryHandler : IRequestHandler<GetBookDetailsQuery, G
     {
         return includes => includes
             .Include(b => b.Status)
-            .Include(b => b.LibraryBooks).ThenInclude(x => x.Library);
+            .Include(b => b.LibraryBooks)
+                .ThenInclude(x => x.Library);
     }
 }

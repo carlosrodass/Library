@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Application.Features.LibraryFeature.Commands.CreateLibrary;
 
-public class CreateLibraryCommand : IRequest<int>
+public class CreateLibraryCommand : IRequest<long>
 {
     public string Name { get; set; }
     public string Description { get; set; }

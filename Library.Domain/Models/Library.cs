@@ -1,10 +1,11 @@
 ﻿using MyLibrary.Domain.Common;
+using MyLibrary.Domain.Models.Common;
 using System.Diagnostics;
 
 namespace MyLibrary.Domain.Models
 {
 
-    public class Library : BaseEntity
+    public class Library : AggregateRoot
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -19,13 +20,52 @@ namespace MyLibrary.Domain.Models
 
         //public int UserId { get; set; }
 
+        private Library(string name, string description, string image)
+        {
+            Name = name;
+            Description = description;
+            Image = image;
+            LibraryBooks = new List<LibraryBook>();
+        }
+
+
+        public static Library Create(string name, string description, string image)
+        {
+            CheckRequiredBasicFields(name, description);
+            return new Library(name, description, image);
+        }
+
         public Library Update(string name, string description, string image)
         {
+            CheckRequiredBasicFields(name, description);
+
             Name = name;
             Description = description;
             Image = image;
             return this;
         }
+
+        // public Library AddBooks(List<Book> books)
+        // {
+
+        //     LibraryBooks.AddRange(books);
+
+
+        //     return this;
+        // }
+
+
+        #region Private
+
+        private static void CheckRequiredBasicFields(string name, string description) //TODO: Add Result Pattern
+        {
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description))
+            {
+
+            }
+        }
+        #endregion
+
     }
 
 }

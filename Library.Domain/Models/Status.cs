@@ -3,7 +3,6 @@
 namespace MyLibrary.Domain.Models
 {
 
-
     public class Status : Enum
     {
         public static Status Private { get; set; } = new(1, nameof(Private));

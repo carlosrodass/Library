@@ -3,11 +3,12 @@ using MediatR;
 using MyLibrary.Application.Contracts.Logging;
 using MyLibrary.Application.Contracts.Persistence;
 using MyLibrary.Application.Exceptions;
+using MyLibrary.Domain.Common;
 using MyLibrary.Domain.Models;
 
 namespace MyLibrary.Application.Features.BookFeature.Commands.CreateBook
 {
-    public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, int>
+    public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Error>
     {
         #region Fields
 
@@ -19,7 +20,9 @@ namespace MyLibrary.Application.Features.BookFeature.Commands.CreateBook
 
         #region Builder
 
-        public CreateBookCommandHandler(IMapper mapper, IBookRepository bookRepository, IAppLogger<CreateBookCommandHandler> logger)
+        public CreateBookCommandHandler(IMapper mapper,
+                                        IBookRepository bookRepository,
+                                        IAppLogger<CreateBookCommandHandler> logger)
         {
             _mapper = mapper;
             _bookRepository = bookRepository;
@@ -30,24 +33,22 @@ namespace MyLibrary.Application.Features.BookFeature.Commands.CreateBook
 
         #region methods
 
-        public async Task<int> Handle(CreateBookCommand request, CancellationToken cancellationToken)
+        public async Task<Error> Handle(CreateBookCommand request, CancellationToken cancellationToken)
         {
-            await CheckValidFields(request);
-            var newBook = _mapper.Map<Book>(request);
+
+            if (request == null) { throw new BadRequestException("Book not provided"); }
+            var newBook = Book.Create(request.Title, request.AuthorName, request.Isbn, request.Price); //TODO: Add Result pattern
+
             await _bookRepository.CreateAsync(newBook);
             await _bookRepository.SaveChangesAsync();
-            return newBook.Id;
+
+
+            return Error.None;
         }
 
         #endregion
 
         #region Private methods
-
-        private async Task<bool> CheckValidFields(CreateBookCommand createBookCommand)
-        {
-            if (createBookCommand == null) { throw new BadRequestException("Book not provided"); }
-            return true;
-        }
 
         #endregion
     }

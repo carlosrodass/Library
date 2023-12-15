@@ -14,9 +14,12 @@ namespace MyLibrary.Application.Features.BookFeature.Commands.DeleteBook
         }
         public async Task<Unit> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
         {
-            //TODO: Add validation
-
+            
             var bookToDelete = await _bookRepository.GetByIdAsync(request.Id);
+            if (bookToDelete == null)
+            {
+                //TODO: Add Result pattern and Return CustomError 
+            }
 
             await _bookRepository.DeleteAsync(bookToDelete);
             await _bookRepository.SaveChangesAsync();

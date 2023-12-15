@@ -11,7 +11,6 @@ namespace MyLibrary.Application.Features.LibraryFeature.Commands.RemoveBooksFrom
     {
         #region Fields
         private readonly ILibraryRepository _libraryRepository;
-        private readonly ILibraryBookRepository _libraryBookRepository;
         private readonly IMapper _mapper;
 
         #endregion
@@ -19,11 +18,9 @@ namespace MyLibrary.Application.Features.LibraryFeature.Commands.RemoveBooksFrom
         #region Builder
 
         public RemoveBooksFromLibraryCommandHandler(ILibraryRepository libraryRepository,
-                                                    ILibraryBookRepository libraryBookRepository,
                                                     IMapper mapper)
         {
             this._libraryRepository = libraryRepository;
-            this._libraryBookRepository = libraryBookRepository;
             this._mapper = mapper;
         }
         #endregion
@@ -34,8 +31,6 @@ namespace MyLibrary.Application.Features.LibraryFeature.Commands.RemoveBooksFrom
         {
             var resultLibrary = await GetLibrary(request.Id);
             await CheckBooks(request.BooksIds);
-
-
 
             return _mapper.Map<GetLibraryDetailsDto>(resultLibrary);
         }

@@ -10,13 +10,16 @@ namespace MyLibrary.Application.Features.LibraryFeature.Commands.DeleteLibrary
 
         public DeleteLibraryCommandHandler(ILibraryRepository libraryRepository)
         {
-            this._libraryRepository = libraryRepository;
+            _libraryRepository = libraryRepository;
         }
         public async Task<Unit> Handle(DeleteLibraryCommand request, CancellationToken cancellationToken)
         {
 
             var result = await _libraryRepository.GetByIdAsync(request.Id);
-            if (result == null) { throw new NotFoundException("Library not found", request.Id); }
+            if (result == null)
+            {
+                //TODO: Add Result Pattern and Custom Error
+            }
 
             await _libraryRepository.DeleteAsync(result);
             await _libraryRepository.SaveChangesAsync();

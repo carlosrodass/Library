@@ -9,13 +9,13 @@ namespace MyLibrary.Application.Features.BookFeature.Commands.UpdateBook
 {
 
 
-    public class UpdateBookCommand : IRequest<int>
+    public class UpdateBookCommand : IRequest<long>
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Title { get; set; }
         public string AuthorName { get; set; }
         public string Isbn { get; set; }
-        public long price { get; set; }
+        public long Price { get; set; }
         public DateTime ReleaseDate { get; set; }
         public string Image { get; set; }
         public int Order { get; set; }

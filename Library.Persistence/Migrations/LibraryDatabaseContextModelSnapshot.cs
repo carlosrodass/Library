@@ -70,7 +70,7 @@ namespace MyLibrary.Persistence.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("MyLibrary.Domain.Models.KeyPoint", b =>
@@ -106,7 +106,7 @@ namespace MyLibrary.Persistence.Migrations
 
                     b.HasIndex("ResumeId");
 
-                    b.ToTable("KeyPoints");
+                    b.ToTable("KeyPoints", (string)null);
                 });
 
             modelBuilder.Entity("MyLibrary.Domain.Models.Library", b =>
@@ -151,7 +151,7 @@ namespace MyLibrary.Persistence.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Libraries");
+                    b.ToTable("Libraries", (string)null);
                 });
 
             modelBuilder.Entity("MyLibrary.Domain.Models.LibraryBook", b =>
@@ -186,7 +186,7 @@ namespace MyLibrary.Persistence.Migrations
 
                     b.HasIndex("LibraryId");
 
-                    b.ToTable("LibraryBooks");
+                    b.ToTable("LibraryBooks", (string)null);
                 });
 
             modelBuilder.Entity("MyLibrary.Domain.Models.Resume", b =>
@@ -230,7 +230,7 @@ namespace MyLibrary.Persistence.Migrations
 
                     b.HasIndex("ResumeTypeId");
 
-                    b.ToTable("Resumes");
+                    b.ToTable("Resumes", (string)null);
                 });
 
             modelBuilder.Entity("MyLibrary.Domain.Models.ResumeType", b =>
@@ -245,7 +245,7 @@ namespace MyLibrary.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ResumeTypes");
+                    b.ToTable("ResumeTypes", (string)null);
 
                     b.HasData(
                         new
@@ -272,7 +272,7 @@ namespace MyLibrary.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Status");
+                    b.ToTable("Status", (string)null);
 
                     b.HasData(
                         new

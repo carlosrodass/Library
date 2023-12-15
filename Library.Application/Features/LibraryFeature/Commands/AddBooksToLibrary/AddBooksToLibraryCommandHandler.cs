@@ -13,7 +13,6 @@ namespace MyLibrary.Application.Features.LibraryFeature.Commands.AddBooksToLibra
         #region Fields
 
         private readonly ILibraryRepository _libraryRepository;
-        private ILibraryBookRepository _libraryBookRepository;
         private IBookRepository _bookRepository;
         private readonly IMapper _mapper;
         #endregion
@@ -21,12 +20,10 @@ namespace MyLibrary.Application.Features.LibraryFeature.Commands.AddBooksToLibra
         #region Builder
 
         public AddBooksToLibraryCommandHandler(ILibraryRepository libraryRepository,
-                                                ILibraryBookRepository libraryBookRepository,
                                                 IBookRepository bookRepository,
                                                 IMapper mapper)
         {
             this._libraryRepository = libraryRepository;
-            this._libraryBookRepository = libraryBookRepository;
             this._bookRepository = bookRepository;
             this._mapper = mapper;
         }
@@ -38,71 +35,95 @@ namespace MyLibrary.Application.Features.LibraryFeature.Commands.AddBooksToLibra
         public async Task<GetLibraryDetailsDto> Handle(AddBooksToLibraryCommand request, CancellationToken cancellationToken)
         {
 
-            var resultLibrary = await GetLibrary(request.Id);
+            throw new NotImplementedException();
 
-            List<Book> booksToAddtoLibrary = new List<Book>();
+            //var library = await GetLibrary(request.Id);
+            //var resultBooks = await CheckAndCreateBooksByIds(request.Books);
+            //// library.AddBooks(resultBooks);
+            //await _libraryRepository.UpdateAsync(library);
+            //await _libraryRepository.SaveChangesAsync();
 
-            await CheckAndCreateBooksByIds(request.Books, booksToAddtoLibrary);
-            await CreateLibraryBook(request.Id, booksToAddtoLibrary);
-
-            await _libraryRepository.UpdateAsync(resultLibrary);
-            await _libraryRepository.SaveChangesAsync();
-
-            return _mapper.Map<GetLibraryDetailsDto>(resultLibrary);
+            //return _mapper.Map<GetLibraryDetailsDto>(library);
         }
 
         #endregion
 
         #region Private methods
-        private async Task CreateLibraryBook(int libraryId, List<Book> booksToAddtoLibrary)
-        {
-            List<LibraryBook> libraryBooks = new List<LibraryBook>();
+        // private async Task CreateLibraryBook(int libraryId, List<Book> booksToAddtoLibrary)
+        // {
+        //     List<LibraryBook> libraryBooks = new List<LibraryBook>();
 
-            foreach (var book in booksToAddtoLibrary)
-            {
-                LibraryBook libraryBook = new LibraryBook()
-                {
-                    LibraryId = libraryId,
-                    BookId = book.Id,
-                };
-                libraryBooks.Add(libraryBook);
-            }
+        //     foreach (var book in booksToAddtoLibrary)
+        //     {
+        //         LibraryBook libraryBook = new LibraryBook()
+        //         {
+        //             LibraryId = libraryId,
+        //             BookId = book.Id,
+        //         };
+        //         libraryBooks.Add(libraryBook);
+        //     }
 
-            await _libraryBookRepository.AddRange(libraryBooks);
-            await _libraryBookRepository.SaveChangesAsync();
-        }
-        private async Task CheckAndCreateBooksByIds(List<UpdateBookCommand> books, List<Book> booksToAddtoLibrary)
-        {
-            var booksWithIds = books.Where(x => x.Id != 0);
-            var bookWithoutIds = books.Where(x => x.Id == 0);
+        //     await _libraryBookRepository.AddRange(libraryBooks);
+        //     await _libraryBookRepository.SaveChangesAsync();
+        // }
 
-            await CheckBooksWithIds(booksWithIds, booksToAddtoLibrary);
-            await CreateBooksWithoutIds(bookWithoutIds, booksToAddtoLibrary);
-        }
-        private async Task CheckBooksWithIds(IEnumerable<UpdateBookCommand> booksWithIds, List<Book> booksToAddtoLibrary)
-        {
 
-            foreach (var bookToCheck in booksWithIds)
-            {
-                var resultCheckBook = await _bookRepository.GetByIdAsync(bookToCheck.Id);
-                if (resultCheckBook == null) { throw new NotFoundException("Book", bookToCheck.Id); }
-                booksToAddtoLibrary.Add(resultCheckBook);
-            }
-        }
-        private async Task CreateBooksWithoutIds(IEnumerable<UpdateBookCommand> bookWithoutIds, List<Book> booksToAddtoLibrary)
-        {
-            var booksToCreate = _mapper.Map<List<Book>>(bookWithoutIds);
-            await _bookRepository.AddRange(booksToCreate);
-            await _bookRepository.SaveChangesAsync();
+        //private async Task<List<Book>> CheckAndCreateBooksByIds(List<UpdateBookCommand> books)
+        //{
+        //    List<Book> booksToAddtoLibrary = new List<Book>();
 
-            booksToAddtoLibrary.AddRange(booksToCreate);
-        }
-        private async Task<Library> GetLibrary(int id)
-        {
-            var resultLibrary = await _libraryRepository.GetByIdAsync(id);
-            if (resultLibrary == null) { throw new NotFoundException("Library", id); }
-            return resultLibrary;
-        }
+        //    await CheckBooksWithIds(books.Where(x => x.Id != 0), booksToAddtoLibrary);
+        //    await CreateBooksWithoutIds(books.Where(x => x.Id == 0), booksToAddtoLibrary);
+
+        //    return booksToAddtoLibrary;
+        //}
+
+        //private async Task CheckBooksWithIds(IEnumerable<UpdateBookCommand> booksWithIds, List<Book> booksToAddtoLibrary)
+        //{
+        //    var bookIds = booksWithIds.Select(book => book.Id).ToList();
+
+        //    var booksFromRepository = await _bookRepository.GetByIdsAsync(bookIds, includes: null);
+
+        //    var bookDictionary = booksFromRepository.ToDictionary(book => book.Id);
+
+        //    foreach (var bookToCheck in booksWithIds)
+        //    {
+        //        if (!bookDictionary.TryGetValue(bookToCheck.Id, out Book resultCheckBook))
+        //        {
+        //            throw new NotFoundException("Book", bookToCheck.Id); //TODO: Add Result Pattern
+        //        }
+
+        //        booksToAddtoLibrary.Add(resultCheckBook);
+        //    }
+        //}
+
+        //private async Task CreateBooksWithoutIds(IEnumerable<UpdateBookCommand> bookWithoutIds, List<Book> booksToAddtoLibrary)
+        //{
+
+        //    List<Book> newBooksList = new List<Book>();
+
+        //    foreach (var newBook in bookWithoutIds)
+        //    {
+        //        var result = Book.Create(newBook.Title, newBook.AuthorName, newBook.Isbn, newBook.Price);
+        //        //TODO: Add Result Pattern
+        //        newBooksList.Add(result);
+        //    }
+
+
+        //    await _bookRepository.AddRange(newBooksList);
+        //    await _bookRepository.SaveChangesAsync();
+
+        //    booksToAddtoLibrary.AddRange(newBooksList);
+        //}
+        //private async Task<Library> GetLibrary(int id)
+        //{
+        //    var resultLibrary = await _libraryRepository.GetByIdAsync(id);
+        //    if (resultLibrary == null)
+        //    {
+        //        //TODO: add Result Pattern and return CustomError
+        //    }
+        //    return resultLibrary;
+        //}
         #endregion
     }
 }

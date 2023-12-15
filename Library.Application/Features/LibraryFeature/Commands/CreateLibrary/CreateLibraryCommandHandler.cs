@@ -6,7 +6,7 @@ using MyLibrary.Domain.Models;
 
 namespace MyLibrary.Application.Features.LibraryFeature.Commands.CreateLibrary;
 
-public class CreateLibraryCommandHandler : IRequestHandler<CreateLibraryCommand, int>
+public class CreateLibraryCommandHandler : IRequestHandler<CreateLibraryCommand, long>
 {
     private readonly ILibraryRepository _libraryRepository;
     private readonly IMapper _mapper;
@@ -17,19 +17,20 @@ public class CreateLibraryCommandHandler : IRequestHandler<CreateLibraryCommand,
         _mapper = mapper;
     }
 
-    public async Task<int> Handle(CreateLibraryCommand request, CancellationToken cancellationToken)
+    public async Task<long> Handle(CreateLibraryCommand request, CancellationToken cancellationToken)
     {
-        await CheckValidFields(request);
-        var newLibrary = _mapper.Map<Library>(request);
-        await _libraryRepository.CreateAsync(newLibrary);
+        if (request == null)
+        {
+            //TODO: Add Result Pattern
+        }
+
+        var result = Library.Create(request.Name, request.Description, request.Image);
+        //TODO: Add result Pattern
+
+        await _libraryRepository.CreateAsync(result);
         await _libraryRepository.SaveChangesAsync();
-        return newLibrary.Id;
+
+        return result.Id;
     }
 
-
-    private async Task<bool> CheckValidFields(CreateLibraryCommand request)
-    {
-        if (request == null) { throw new BadRequestException("library not provided"); }
-        return true;
-    }
 }
