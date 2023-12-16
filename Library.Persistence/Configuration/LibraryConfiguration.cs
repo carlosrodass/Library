@@ -29,7 +29,7 @@ namespace MyLibrary.Persistence.Configuration
             //builder.Property(q => q.IsActive)
             //    .HasDefaultValue(true);
 
-            //Here you also define the relations beetween to entities rather be One-To-Many , One-To-One..
+            
         }
 
     }

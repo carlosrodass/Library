@@ -31,7 +31,6 @@ namespace MyLibrary.Api.Controllers
         {
             var result = await _mediator.Send(new GetAllBooksQuery());
             return Ok(result);
-
         }
 
         [HttpGet("{id:int}")]
@@ -48,7 +47,7 @@ namespace MyLibrary.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Post([FromBody] CreateBookCommand createBookCommand)
+        public async Task<IActionResult> Post(CreateBookCommand createBookCommand)
         {
 
             var result = await _mediator.Send(createBookCommand);
@@ -60,10 +59,11 @@ namespace MyLibrary.Api.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult> Put(UpdateBookCommand updateBookCommand)
+        public async Task<IActionResult> Put(UpdateBookCommand updateBookCommand)
         {
-            await _mediator.Send(updateBookCommand);
-            return NoContent();
+
+            var result = await _mediator.Send(updateBookCommand);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]

@@ -9,17 +9,21 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Persistence.Configuration
 {
-    public class ResumeConfiguration : IEntityTypeConfiguration<Resume>
+    public class BookConfiguration : IEntityTypeConfiguration<Book>
     {
-        public void Configure(EntityTypeBuilder<Resume> builder)
+        public void Configure(EntityTypeBuilder<Book> builder)
         {
-            builder.HasKey(e => e.Id);
 
-            builder.HasMany(x => x.KeyPoints)
-                .WithOne(x => x.Resume)
+            builder.HasKey(x => x.Id);
+
+
+            builder.HasMany(x => x.Resumes)
+                .WithOne(x => x.Book)
                 .HasForeignKey(x => x.Id)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+
+            
         }
     }
 }

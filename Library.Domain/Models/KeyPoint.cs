@@ -4,10 +4,36 @@ namespace MyLibrary.Domain.Models
 {
     public class KeyPoint : BaseEntity
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public Resume Resume { get; set; }
-        public long ResumeId { get; set; }
+        #region Fields
+
+        public string Name { get; private set; }
+        public string Description { get; private set; }
+        public Resume Resume { get; private set; }
+        public long ResumeId { get; private set; }
+
+        #endregion
+
+        #region Builder
+
+        private KeyPoint()
+        {
+
+        }
+
+        #endregion
+
+        #region Public methods
+
+        public static KeyPoint Create()
+        {
+            return new KeyPoint();
+        }
+
+        #endregion
+
+        #region Private
+
+        #endregion
     }
 }
 

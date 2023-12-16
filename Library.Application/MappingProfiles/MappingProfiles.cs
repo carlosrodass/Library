@@ -52,8 +52,8 @@ namespace MyLibrary.Application.MappingProfiles
         }
         private void ResumeProfile()
         {
-            CreateMap<Resume, GetResumeDetailsDto>();
-            CreateMap<Resume, GetAllResumesDto>();
+            CreateMap<KeyPoint, GetResumeDetailsDto>();
+            CreateMap<KeyPoint, GetAllResumesDto>();
 
         }
     }

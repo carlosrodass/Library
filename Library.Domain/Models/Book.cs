@@ -6,6 +6,8 @@ namespace MyLibrary.Domain.Models
 {
     public class Book : AggregateRoot
     {
+        #region Fields
+
         public string Title { get; private set; }
         public string AuthorName { get; private set; }
         public string Isbn { get; private set; }
@@ -15,12 +17,26 @@ namespace MyLibrary.Domain.Models
         public int Order { get; private set; }
         public Status Status { get; private set; }
         public int StatusId { get; private set; }
-        public List<Resume> Resumes { get; private set; }
-        public List<LibraryBook> LibraryBooks { get; set; }
+
+        public readonly List<Resume> _resumes;
+        public IReadOnlyCollection<Resume> Resumes => _resumes;
+
+        public readonly List<LibraryBook> _libraryBooks;
+        public IReadOnlyCollection<LibraryBook> LibraryBooks => _libraryBooks;
 
         //public User User { get; set; }
 
         //public int UserId { get; set; }
+
+        #endregion
+
+        #region Builder
+
+        protected Book()
+        {
+            _resumes = new List<Resume>();
+            _libraryBooks = new List<LibraryBook>();
+        }
 
         private Book(string title,
                      string authorName,
@@ -33,6 +49,10 @@ namespace MyLibrary.Domain.Models
             Price = price;
             StatusId = Status.Private.Id;
         }
+
+        #endregion
+
+        #region Public methods
 
         public static Book Create(string title, string authorName, string isbn, long price)
         {
@@ -57,7 +77,7 @@ namespace MyLibrary.Domain.Models
 
             return this;
         }
-
+        #endregion
 
         #region Private
         private static void CheckRequiredBasicFields(string title, string authorName, string isbn) //TODO: Add Result Pattern

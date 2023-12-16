@@ -8,7 +8,7 @@ using MyLibrary.Domain.Models;
 
 namespace MyLibrary.Application.Features.BookFeature.Commands.CreateBook
 {
-    public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Error>
+    public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, long>
     {
         #region Fields
 
@@ -33,17 +33,14 @@ namespace MyLibrary.Application.Features.BookFeature.Commands.CreateBook
 
         #region methods
 
-        public async Task<Error> Handle(CreateBookCommand request, CancellationToken cancellationToken)
+        public async Task<long> Handle(CreateBookCommand request, CancellationToken cancellationToken)
         {
-
-            if (request == null) { throw new BadRequestException("Book not provided"); }
             var newBook = Book.Create(request.Title, request.AuthorName, request.Isbn, request.Price); //TODO: Add Result pattern
 
             await _bookRepository.CreateAsync(newBook);
             await _bookRepository.SaveChangesAsync();
 
-
-            return Error.None;
+            return newBook.Id;
         }
 
         #endregion

@@ -10,10 +10,10 @@ namespace MyLibrary.Application.Dtos.LibraryBook
 {
     public class LibraryBookDto
     {
-        public int Id { get; set; }
-        public int LibraryId { get; set; }
+        public long Id { get; set; }
+        public long LibraryId { get; set; }
         public GetLibraryDetailsDto Library { get; set; }
-        public int BookId { get; set; }
+        public long BookId { get; set; }
         public GetBookDetailsDto Book { get; set; }
     }
 }

@@ -1,19 +1,19 @@
-﻿using System;
+﻿using MyLibrary.Application.Dtos.Resume;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyLibrary.Application.Dtos.Library
+namespace MyLibrary.Application.Dtos
 {
-    public class GetAllLibrariesDto
+    public class GetKeyPointDetailsDto
     {
         public long Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Image { get; set; }
-        public bool AllBooksReaded { get; set; }
-        public int Order { get; set; }
+        public long ResumeId { get; set; }
+        public GetResumeDetailsDto Resume { get; set; }
 
     }
 }

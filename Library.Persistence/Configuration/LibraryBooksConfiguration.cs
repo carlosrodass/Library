@@ -21,13 +21,13 @@ namespace MyLibrary.Persistence.Configuration
                 .HasOne(lb => lb.Library)
                 .WithMany(l => l.LibraryBooks)
                 .HasForeignKey(lb => lb.LibraryId)
-                .OnDelete(DeleteBehavior.Restrict); // Especifica ON DELETE NO ACTION
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .HasOne(lb => lb.Book)
                 .WithMany(b => b.LibraryBooks)
                 .HasForeignKey(lb => lb.BookId)
-                .OnDelete(DeleteBehavior.Restrict); // Especifica ON DELETE NO ACTION
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
