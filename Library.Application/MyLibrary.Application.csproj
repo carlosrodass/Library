@@ -19,11 +19,6 @@
   <ItemGroup>
     <Folder Include="Features\KeyPointFeature\" />
     <Folder Include="Features\MasterFeature\Queries\GetAllResumeType\" />
-    <Folder Include="Features\ResumeFeature\Commands\CreateResume\" />
-    <Folder Include="Features\ResumeFeature\Commands\DeleteResume\" />
-    <Folder Include="Features\ResumeFeature\Commands\UpdateResume\" />
-    <Folder Include="Features\ResumeFeature\Queries\GetAllResumes\" />
-    <Folder Include="Features\ResumeFeature\Queries\GetResumeDetails\" />
   </ItemGroup>
 
 

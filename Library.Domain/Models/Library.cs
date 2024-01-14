@@ -1,4 +1,5 @@
-﻿using MyLibrary.Domain.Common;
+﻿using CSharpFunctionalExtensions;
+using MyLibrary.Domain.Common;
 using MyLibrary.Domain.Models.Common;
 using System.Diagnostics;
 
@@ -38,22 +39,25 @@ namespace MyLibrary.Domain.Models
             Name = name;
             Description = description;
             Image = image;
-            
+
         }
 
         #endregion
 
         #region Public methods
 
-        public static Library Create(string name, string description, string image)
+        public static Result<Library, Error> Create(string name, string description, string image)
         {
-            CheckRequiredBasicFields(name, description);
+            var result = CheckRequiredBasicFields(name, description);
+            if (result.IsFailure) { return result.Error; }
+
             return new Library(name, description, image);
         }
 
-        public Library Update(string name, string description, string image)
+        public Result<Library, Error> Update(string name, string description, string image)
         {
-            CheckRequiredBasicFields(name, description);
+            var result = CheckRequiredBasicFields(name, description);
+            if (result.IsFailure) { return result.Error; }
 
             Name = name;
             Description = description;
@@ -61,25 +65,18 @@ namespace MyLibrary.Domain.Models
             return this;
         }
 
-        // public Library AddBooks(List<Book> books)
-        // {
-
-        //     LibraryBooks.AddRange(books);
-
-
-        //     return this;
-        // }
-
         #endregion
 
         #region Private
 
-        private static void CheckRequiredBasicFields(string name, string description) //TODO: Add Result Pattern
+        private static Result<bool, Error> CheckRequiredBasicFields(string name, string description)
         {
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description))
             {
-
+                return Error.RequiredField;
             }
+
+            return true;
         }
         #endregion
 

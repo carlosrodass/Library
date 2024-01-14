@@ -4,7 +4,7 @@ using MyLibrary.Domain.Common;
 
 namespace MyLibrary.Application.Features.BookFeature.Commands.CreateBook
 {
-    public class CreateBookCommand : IRequest<long>
+    public class CreateBookCommand : IRequest<Result<long, Error>>
     {
         public string Title { get; set; }
         public string AuthorName { get; set; }

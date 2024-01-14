@@ -9,17 +9,15 @@ namespace MyLibrary.Domain.Common
 {
     public sealed record Error(string Code, string? Messsage = null)
     {
-        public static readonly Error None = new Error(string.Empty);
+        public static readonly Error None = new(string.Empty, string.Empty);
+
+        public static readonly Error NotFound = new Error
+            ("NotFound", "Not found");
+
+        public static readonly Error RequiredField = new Error
+            ("RequiredField", "Required field");
     }
 
-    //public string Code { get; set; }
-    //public string Message { get; set; }
-
-    //public Error(string code, string message)
-    //{
-    //    Code = code;
-    //    Message = message;
-    //}
 
 
 }

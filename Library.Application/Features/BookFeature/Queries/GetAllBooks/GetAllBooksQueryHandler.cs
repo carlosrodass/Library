@@ -1,27 +1,32 @@
 ﻿using AutoMapper;
+using CSharpFunctionalExtensions;
 using MediatR;
 using MyLibrary.Application.Contracts.Persistence;
 using MyLibrary.Application.Dtos.Book;
+using MyLibrary.Domain.Common;
 
-namespace MyLibrary.Application.Features.BookFeature.Queries.GetAllBooks
+namespace MyLibrary.Application.Features.BookFeature.Queries.GetAllBooks;
+
+public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, Result<List<GetAllBooksDto>, Error>>
 {
-    public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, List<GetAllBooksDto>>
+    private readonly IMapper _mapper;
+    private readonly IBookRepository _bookRepository;
+
+    public GetAllBooksQueryHandler(IMapper mapper, IBookRepository bookRepository)
     {
-        private readonly IMapper _mapper;
-        private readonly IBookRepository _bookRepository;
-
-        public GetAllBooksQueryHandler(IMapper mapper, IBookRepository bookRepository)
-        {
-            _mapper = mapper;
-            _bookRepository = bookRepository;
-        }
-
-        public async Task<List<GetAllBooksDto>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
-        {
-            var booksList = await _bookRepository.GetAsync();
-            return _mapper.Map<List<GetAllBooksDto>>(booksList);
-
-        }
+        _mapper = mapper;
+        _bookRepository = bookRepository;
     }
 
+    public async Task<Result<List<GetAllBooksDto>, Error>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
+    {
+        var booksList = await _bookRepository.GetAsync();
+        if (booksList.Count == 0)
+        {
+            return new List<GetAllBooksDto>();
+        }
+
+        return _mapper.Map<List<GetAllBooksDto>>(booksList);
+
+    }
 }

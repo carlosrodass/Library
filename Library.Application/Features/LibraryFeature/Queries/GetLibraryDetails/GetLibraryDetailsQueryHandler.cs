@@ -6,11 +6,13 @@ using MyLibrary.Application.Contracts.Persistence;
 using MyLibrary.Application.Dtos.Library;
 using MyLibrary.Application.Exceptions;
 using MyLibrary.Domain.Models;
+using MyLibrary.Domain.Common;
+using CSharpFunctionalExtensions;
 
 namespace MyLibrary.Application.Features.LibraryFeature.Queries.GetLibraryDetails
 {
 
-    public class GetLibraryDetailsQueryHandler : IRequestHandler<GetLibraryDetailsQuery, GetLibraryDetailsDto>
+    public class GetLibraryDetailsQueryHandler : IRequestHandler<GetLibraryDetailsQuery, Result<GetLibraryDetailsDto, Error>>
     {
         private readonly ILibraryRepository _libraryRepository;
         private readonly IMapper _mapper;
@@ -21,12 +23,11 @@ namespace MyLibrary.Application.Features.LibraryFeature.Queries.GetLibraryDetail
             _mapper = mapper;
         }
 
-        public async Task<GetLibraryDetailsDto> Handle(GetLibraryDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<GetLibraryDetailsDto, Error>> Handle(GetLibraryDetailsQuery request, CancellationToken cancellationToken)
         {
             var result = await _libraryRepository.GetByIdAsync(request.Id, GetIncludes());
-            if (result == null) { throw new NotFoundException("Library", request.Id); }
+            if (result is null) { return Error.NotFound; }
             return _mapper.Map<GetLibraryDetailsDto>(result);
-
         }
 
 

@@ -29,17 +29,19 @@ namespace MyLibrary.Api.Controllers
         public async Task<ActionResult<List<GetAllLibrariesDto>>> Get()
         {
             var result = await _mediator.Send(new GetAllLibrariesQuery());
+            if (result.IsFailure) { return BadRequest(result); }
             return Ok(result);
 
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:long}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<GetLibraryDetailsDto>> Get(int id)
+        public async Task<ActionResult<GetLibraryDetailsDto>> Get(long id)
         {
             var result = await _mediator.Send(new GetLibraryDetailsQuery(id));
+            if (result.IsFailure) { return BadRequest(result); }
             return Ok(result);
         }
 
@@ -52,6 +54,7 @@ namespace MyLibrary.Api.Controllers
         {
 
             var result = await _mediator.Send(createLibraryCommand);
+            if (result.IsFailure) { return BadRequest(result); }
             return CreatedAtAction(nameof(Get), new { id = result });
         }
 
@@ -62,7 +65,8 @@ namespace MyLibrary.Api.Controllers
         [ProducesDefaultResponseType]
         public async Task<ActionResult> Put(UpdateLibraryCommand updateLibraryCommand)
         {
-            await _mediator.Send(updateLibraryCommand);
+            var result = await _mediator.Send(updateLibraryCommand);
+            if (result.IsFailure) { return BadRequest(result); }
             return NoContent();
         }
 
@@ -74,7 +78,8 @@ namespace MyLibrary.Api.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var command = new DeleteLibraryCommand { Id = id };
-            await _mediator.Send(command);
+            var result = await _mediator.Send(command);
+            if (result.IsFailure) { return BadRequest(result); }
             return NoContent();
         }
 
@@ -85,7 +90,7 @@ namespace MyLibrary.Api.Controllers
         public async Task<ActionResult<GetLibraryDetailsDto>> AddBooksToLibrary([FromBody] AddBooksToLibraryCommand addBooksToLibraryCommand)
         {
 
-            var result = await _mediator.Send(addBooksToLibraryCommand);
+            var result = await _mediator.Send(addBooksToLibraryCommand); //ADD RESULT PATTERN
             return Ok(result);
         }
 
@@ -96,7 +101,7 @@ namespace MyLibrary.Api.Controllers
         public async Task<ActionResult<GetLibraryDetailsDto>> RemoveBooksFromLibrary([FromBody] RemoveBooksFromLibraryCommand removeBooksFromLibraryCommand)
         {
 
-            var result = await _mediator.Send(removeBooksFromLibraryCommand);
+            var result = await _mediator.Send(removeBooksFromLibraryCommand); //ADD RESULT PATTERN
             return Ok(result);
         }
 

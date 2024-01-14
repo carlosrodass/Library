@@ -1,5 +1,4 @@
-﻿
-
+﻿using CSharpFunctionalExtensions;
 using MyLibrary.Domain.Common;
 
 namespace MyLibrary.Domain.Models
@@ -42,14 +41,18 @@ namespace MyLibrary.Domain.Models
 
         #region Public methods
 
-        public static Resume Create(string title, string description, string content, int resumeTypeId, long bookId)
+        public static Result<Resume, Error> Create(string title, string description, string content, int resumeTypeId, long bookId)
         {
+            var result = CheckCreateRequiredFields(title, resumeTypeId, bookId);
+
+            if (result.IsFailure) { return result.Error; }
+
             return new Resume(title, description, content, resumeTypeId, bookId);
         }
 
-        public Resume Update(string title, string description, string content)
+        public Result<Resume, Error> Update(string title, string description, string content)
         {
-            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(content)) { throw new Exception("Data not provided"); }
+            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(content)) { return Error.RequiredField; }
 
             Title = title;
             Description = description;
@@ -61,6 +64,26 @@ namespace MyLibrary.Domain.Models
         #endregion
 
         #region Private methods
+
+        private static Result<bool, Error> CheckCreateRequiredFields(string title, int resumeTypeId, long bookId)
+        {
+            if (string.IsNullOrEmpty(title))
+            {
+                return false; //TODO: Change to RESULT Pattern
+            }
+
+            if (resumeTypeId <= 0)
+            {
+                return false; //TODO: Change to RESULT Pattern
+            }
+
+            if (bookId <= 0)
+            {
+                return false; //TODO: Change to RESULT Pattern
+            }
+
+            return true;
+        }
 
 
         #endregion

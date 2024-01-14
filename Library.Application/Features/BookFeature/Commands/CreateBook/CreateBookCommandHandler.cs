@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CSharpFunctionalExtensions;
 using MediatR;
 using MyLibrary.Application.Contracts.Logging;
 using MyLibrary.Application.Contracts.Persistence;
@@ -8,7 +9,7 @@ using MyLibrary.Domain.Models;
 
 namespace MyLibrary.Application.Features.BookFeature.Commands.CreateBook
 {
-    public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, long>
+    public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Result<long, Error>>
     {
         #region Fields
 
@@ -33,14 +34,15 @@ namespace MyLibrary.Application.Features.BookFeature.Commands.CreateBook
 
         #region methods
 
-        public async Task<long> Handle(CreateBookCommand request, CancellationToken cancellationToken)
+        public async Task<Result<long, Error>> Handle(CreateBookCommand request, CancellationToken cancellationToken)
         {
-            var newBook = Book.Create(request.Title, request.AuthorName, request.Isbn, request.Price); //TODO: Add Result pattern
+            var newBookResult = Book.Create(request.Title, request.AuthorName, request.Isbn, request.Price);
+            if (newBookResult.IsFailure) { return newBookResult.Error; }
 
-            await _bookRepository.CreateAsync(newBook);
+            await _bookRepository.CreateAsync(newBookResult.Value);
             await _bookRepository.SaveChangesAsync();
 
-            return newBook.Id;
+            return newBookResult.Value.Id;
         }
 
         #endregion

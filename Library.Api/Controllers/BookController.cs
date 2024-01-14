@@ -30,16 +30,20 @@ namespace MyLibrary.Api.Controllers
         public async Task<ActionResult<List<GetAllBooksDto>>> Get()
         {
             var result = await _mediator.Send(new GetAllBooksQuery());
+            if (result.IsFailure) { return BadRequest(result); }
+
             return Ok(result);
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:long}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<GetBookDetailsDto>> Get(int id)
+        public async Task<ActionResult<GetBookDetailsDto>> GetByIdAsync(int id)
         {
             var result = await _mediator.Send(new GetBookDetailsQuery(id));
+            if (result.IsFailure) { return BadRequest(result); }
+
             return Ok(result);
         }
 
@@ -47,10 +51,12 @@ namespace MyLibrary.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Post(CreateBookCommand createBookCommand)
+        public async Task<IActionResult> CreateAsync(CreateBookCommand createBookCommand)
         {
 
             var result = await _mediator.Send(createBookCommand);
+            if (result.IsFailure) { return BadRequest(result); }
+
             return CreatedAtAction(nameof(Get), new { id = result });
         }
 
@@ -59,10 +65,12 @@ namespace MyLibrary.Api.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Put(UpdateBookCommand updateBookCommand)
+        public async Task<IActionResult> UpdateAsync(UpdateBookCommand updateBookCommand)
         {
 
             var result = await _mediator.Send(updateBookCommand);
+            if (result.IsFailure) { return BadRequest(result); }
+
             return Ok(result);
         }
 
@@ -70,10 +78,11 @@ namespace MyLibrary.Api.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
             var command = new DeleteBookCommand { Id = id };
-            await _mediator.Send(command);
+            var result = await _mediator.Send(command);
+            if (result.IsFailure) { return BadRequest(result); }
             return NoContent();
         }
 

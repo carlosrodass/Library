@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using CSharpFunctionalExtensions;
 using MediatR;
 using MyLibrary.Application.Contracts.Persistence;
+using MyLibrary.Domain.Common;
 
 namespace MyLibrary.Application.Features.BookFeature.Commands.DeleteBook
 {
-    public class DeleteBookCommandHandler : IRequestHandler<DeleteBookCommand, Unit>
+    public class DeleteBookCommandHandler : IRequestHandler<DeleteBookCommand, Result<Unit, Error>>
     {
         private readonly IBookRepository _bookRepository;
 
@@ -12,14 +14,11 @@ namespace MyLibrary.Application.Features.BookFeature.Commands.DeleteBook
         {
             _bookRepository = bookRepository;
         }
-        public async Task<Unit> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, Error>> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
         {
-            
+
             var bookToDelete = await _bookRepository.GetByIdAsync(request.Id);
-            if (bookToDelete == null)
-            {
-                //TODO: Add Result pattern and Return CustomError 
-            }
+            if (bookToDelete is null) { return Error.NotFound; }
 
             await _bookRepository.DeleteAsync(bookToDelete);
             await _bookRepository.SaveChangesAsync();

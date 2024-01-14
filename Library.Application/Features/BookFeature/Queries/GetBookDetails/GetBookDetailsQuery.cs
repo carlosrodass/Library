@@ -1,5 +1,7 @@
-﻿using MediatR;
+﻿using CSharpFunctionalExtensions;
+using MediatR;
 using MyLibrary.Application.Dtos.Book;
+using MyLibrary.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +10,6 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Application.Features.BookFeature.Queries.GetBookDetails
 {
-    public record GetBookDetailsQuery(int Id) : IRequest<GetBookDetailsDto>;
+    public record GetBookDetailsQuery(long Id) : IRequest<Result<GetBookDetailsDto, Error>>;
 
 }

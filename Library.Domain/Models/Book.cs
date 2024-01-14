@@ -1,4 +1,5 @@
-﻿using MyLibrary.Domain.Common;
+﻿using CSharpFunctionalExtensions;
+using MyLibrary.Domain.Common;
 using MyLibrary.Domain.Models.Common;
 using System.Reflection.Metadata;
 
@@ -52,19 +53,22 @@ namespace MyLibrary.Domain.Models
 
         #endregion
 
-        #region Public methods
+        #region Book
 
-        public static Book Create(string title, string authorName, string isbn, long price)
+        public static Result<Book, Error> Create(string title, string authorName, string isbn, long price)
         {
-            CheckRequiredBasicFields(title, authorName, isbn);
+            var result = CheckRequiredBasicFields(title, authorName, isbn);
+            if (result.IsFailure) { return result.Error; }
 
             return new Book(title, authorName, isbn, price);
         }
 
-        public Book Update(string title, string authorName, string isbn, long price, DateTime releaseDate, string image, int order, int statusId)
+        public Result<Book, Error> Update(string title, string authorName, string isbn, long price, DateTime releaseDate, string image, int order, int statusId)
         {
 
-            CheckRequiredBasicFields(title, authorName, isbn);
+            var result = CheckRequiredBasicFields(title, authorName, isbn);
+            if (result.IsFailure) { return result.Error; }
+
 
             Title = title;
             AuthorName = authorName;
@@ -79,14 +83,36 @@ namespace MyLibrary.Domain.Models
         }
         #endregion
 
+        #region Resume
+        public Result<Book, Error> AddBookResume(Resume resume)
+        {
+            if (resume is null) { return Error.NotFound; }
+            _resumes.Add(resume);
+
+            return this;
+        }
+        public Result<Book, Error> RemoveResume(Resume resume)
+        {
+            if (resume is null) { return Error.NotFound; }
+            _resumes.Remove(resume);
+
+            return this;
+        }
+
+        #endregion
+
         #region Private
-        private static void CheckRequiredBasicFields(string title, string authorName, string isbn) //TODO: Add Result Pattern
+        private static Result<bool, Error> CheckRequiredBasicFields(string title, string authorName, string isbn)
         {
             if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(authorName) || string.IsNullOrWhiteSpace(isbn))
             {
-
+                return Error.RequiredField;
             }
+
+            return true;
         }
+
+
         #endregion
 
     }
