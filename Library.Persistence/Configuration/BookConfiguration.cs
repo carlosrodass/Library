@@ -17,13 +17,15 @@ namespace MyLibrary.Persistence.Configuration
             builder.HasKey(x => x.Id);
 
 
-            builder.HasMany(x => x.Resumes)
+            builder.HasOne(x => x.Resume)
                 .WithOne(x => x.Book)
-                .HasForeignKey(x => x.Id)
+                .HasForeignKey<Resume>(x => x.Id)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
-            
+
+
+
         }
     }
 }

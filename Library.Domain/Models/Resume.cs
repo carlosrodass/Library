@@ -11,10 +11,10 @@ namespace MyLibrary.Domain.Models
         public string Title { get; private set; }
         public string Description { get; private set; }
         public string Content { get; private set; }
-        public ResumeType ResumeType { get; private set; }
         public int ResumeTypeId { get; private set; }
-        public Book Book { get; private set; }
+        public ResumeType ResumeType { get; private set; }
         public long BookId { get; private set; }
+        public Book Book { get; private set; }
 
         public readonly List<KeyPoint> _keyPoints;
         public IReadOnlyCollection<KeyPoint> KeyPoints => _keyPoints;

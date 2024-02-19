@@ -14,11 +14,8 @@ namespace MyLibrary.Persistence.DataBaseContext
     {
 
         public LibraryDatabaseContext(DbContextOptions<LibraryDatabaseContext> options) : base(options) { }
-
-        public DbSet<Domain.Models.Library> Libraries { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<KeyPoint> KeyPoints { get; set; }
-        public DbSet<LibraryBook> LibraryBooks { get; set; }
         public DbSet<KeyPoint> Resumes { get; set; }
         public DbSet<ResumeType> ResumeTypes { get; set; }
         public DbSet<Status> Status { get; set; }

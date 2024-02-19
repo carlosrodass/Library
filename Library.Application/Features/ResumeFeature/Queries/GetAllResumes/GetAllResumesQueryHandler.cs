@@ -34,23 +34,25 @@ public class GetAllResumesQueryHandler : IRequestHandler<GetAllResumesQuery, Res
 
     public async Task<Result<List<GetAllResumesDto>, Error>> Handle(GetAllResumesQuery request, CancellationToken cancellationToken)
     {
-        var book = await _bookRepository.GetByIdAsync(request.BookId, GetIncludes());
-        if (book is null) { return Error.NotFound; }
+        //var book = await _bookRepository.GetByIdAsync(request.BookId, GetIncludes());
+        //if (book is null) { return Error.NotFound; }
 
-        var resumes = book.Resumes;
-        if (resumes is null) { return new List<GetAllResumesDto>(); }
+        //var resumes = new List<GetAllResumesDto>();
+        //if (resumes is null) { return new List<GetAllResumesDto>(); }
 
-        return _mapper.Map<List<GetAllResumesDto>>(resumes);
+        //return _mapper.Map<List<GetAllResumesDto>>(resumes);
+
+        throw new NotImplementedException();
     }
 
     #endregion
 
     #region Includes
-    private Func<IQueryable<Book>, IIncludableQueryable<Book, object>> GetIncludes()
-    {
-        return includes => includes
-            .Include(b => b.Resumes);
-    }
+    //private Func<IQueryable<Book>, IIncludableQueryable<Book, object>> GetIncludes()
+    //{
+    //    return includes => includes
+    //        .Include(b => b.Resumes);
+    //}
 
 
     #endregion

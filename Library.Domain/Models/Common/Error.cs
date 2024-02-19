@@ -16,6 +16,13 @@ namespace MyLibrary.Domain.Common
 
         public static readonly Error RequiredField = new Error
             ("RequiredField", "Required field");
+
+        public static readonly Error AlreadyExist = new Error
+            ("AlreadyExist", "Already Exist");
+
+        public static readonly Error ResumeFailed = new Error
+             ("ResumeFailed", "Can not add resume because its already created");
+
     }
 
 

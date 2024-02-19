@@ -25,7 +25,6 @@ namespace MyLibrary.Persistence
             });
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.AddScoped<ILibraryRepository, LibraryRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
 
             return services;

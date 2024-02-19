@@ -18,12 +18,8 @@ namespace MyLibrary.Domain.Models
         public int Order { get; private set; }
         public Status Status { get; private set; }
         public int StatusId { get; private set; }
+        public Resume Resume { get; private set; }
 
-        public readonly List<Resume> _resumes;
-        public IReadOnlyCollection<Resume> Resumes => _resumes;
-
-        public readonly List<LibraryBook> _libraryBooks;
-        public IReadOnlyCollection<LibraryBook> LibraryBooks => _libraryBooks;
 
         //public User User { get; set; }
 
@@ -35,8 +31,7 @@ namespace MyLibrary.Domain.Models
 
         protected Book()
         {
-            _resumes = new List<Resume>();
-            _libraryBooks = new List<LibraryBook>();
+
         }
 
         private Book(string title,
@@ -81,23 +76,30 @@ namespace MyLibrary.Domain.Models
 
             return this;
         }
+
         #endregion
 
         #region Resume
-        public Result<Book, Error> AddBookResume(Resume resume)
+        public Result<Book, Error> AddBookResume(string title, string description, string content, int resumeTypeId, long bookId)
         {
-            if (resume is null) { return Error.NotFound; }
-            _resumes.Add(resume);
+
+            if (this.Resume is not null) { return Error.AlreadyExist; }
+
+            var result = Resume.Create(title, description, content, resumeTypeId, bookId);
+            if (result.IsFailure) { return result.Error; }
+
+            Resume = result.Value;
 
             return this;
         }
-        public Result<Book, Error> RemoveResume(Resume resume)
-        {
-            if (resume is null) { return Error.NotFound; }
-            _resumes.Remove(resume);
 
-            return this;
-        }
+        //public Result<Book, Error> RemoveResume(Resume resume)
+        //{
+        //    if (resume is null) { return Error.NotFound; }
+        //    _resumes.Remove(resume);
+
+        //    return this;
+        //}
 
         #endregion
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyLibrary.Persistence.DataBaseContext;
 
@@ -11,9 +12,11 @@ using MyLibrary.Persistence.DataBaseContext;
 namespace MyLibrary.Persistence.Migrations
 {
     [DbContext(typeof(LibraryDatabaseContext))]
-    partial class LibraryDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240217155909_RemoveLibraryTable")]
+    partial class RemoveLibraryTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,6 +53,9 @@ namespace MyLibrary.Persistence.Migrations
 
                     b.Property<string>("Isbn")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("LibraryId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Order")
                         .HasColumnType("int");
@@ -222,9 +228,9 @@ namespace MyLibrary.Persistence.Migrations
             modelBuilder.Entity("MyLibrary.Domain.Models.Resume", b =>
                 {
                     b.HasOne("MyLibrary.Domain.Models.Book", "Book")
-                        .WithOne("Resume")
-                        .HasForeignKey("MyLibrary.Domain.Models.Resume", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("Resumes")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("MyLibrary.Domain.Models.ResumeType", "ResumeType")
@@ -240,7 +246,7 @@ namespace MyLibrary.Persistence.Migrations
 
             modelBuilder.Entity("MyLibrary.Domain.Models.Book", b =>
                 {
-                    b.Navigation("Resume");
+                    b.Navigation("Resumes");
                 });
 
             modelBuilder.Entity("MyLibrary.Domain.Models.Resume", b =>

@@ -17,12 +17,23 @@ namespace MyLibrary.Api.Controllers;
 [ApiController]
 public class ResumeController : ControllerBase
 {
+    #region Fields
+
     private readonly IMediator _mediator;
+
+    #endregion
+
+    #region Builder
 
     public ResumeController(IMediator mediator)
     {
         this._mediator = mediator;
     }
+
+    #endregion
+
+    #region Resume
+
 
     [HttpGet("book/{BookId:long}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -48,7 +59,7 @@ public class ResumeController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost()]
+    [HttpPut("Create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
@@ -62,7 +73,7 @@ public class ResumeController : ControllerBase
     }
 
 
-    [HttpPut()]
+    [HttpPut("Update")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
@@ -85,6 +96,30 @@ public class ResumeController : ControllerBase
         var result = await _mediator.Send(command);
         if (result.IsFailure) { return BadRequest(result); }
         return NoContent();
-    } 
+    }
 
-}   
+    #endregion
+
+
+    #region KeyPoints
+
+    [HttpPost("KeyPoint")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> CreateKeyPointAsync(CreateResumeCommand createResumeCommand)
+    {
+
+        var result = await _mediator.Send(createResumeCommand);
+        if (result.IsFailure) { return BadRequest(result); }
+
+        return CreatedAtAction(nameof(Get), new { id = result.Value });
+    }
+
+
+    #endregion
+
+
+
+
+}

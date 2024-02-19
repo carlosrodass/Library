@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyLibrary.Persistence.DataBaseContext;
 
@@ -11,9 +12,11 @@ using MyLibrary.Persistence.DataBaseContext;
 namespace MyLibrary.Persistence.Migrations
 {
     [DbContext(typeof(LibraryDatabaseContext))]
-    partial class LibraryDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240216140021_ChangingRelation")]
+    partial class ChangingRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,6 +54,10 @@ namespace MyLibrary.Persistence.Migrations
                     b.Property<string>("Isbn")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("LibraryId")
+                        .IsRequired()
+                        .HasColumnType("bigint");
+
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
@@ -67,6 +74,8 @@ namespace MyLibrary.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LibraryId");
 
                     b.HasIndex("StatusId");
 
@@ -102,6 +111,51 @@ namespace MyLibrary.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("KeyPoint");
+                });
+
+            modelBuilder.Entity("MyLibrary.Domain.Models.Library", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<bool>("AllBooksReaded")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("Libraries");
                 });
 
             modelBuilder.Entity("MyLibrary.Domain.Models.Resume", b =>
@@ -199,11 +253,19 @@ namespace MyLibrary.Persistence.Migrations
 
             modelBuilder.Entity("MyLibrary.Domain.Models.Book", b =>
                 {
+                    b.HasOne("MyLibrary.Domain.Models.Library", "Library")
+                        .WithMany("Books")
+                        .HasForeignKey("LibraryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("MyLibrary.Domain.Models.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Library");
 
                     b.Navigation("Status");
                 });
@@ -219,12 +281,23 @@ namespace MyLibrary.Persistence.Migrations
                     b.Navigation("Resume");
                 });
 
+            modelBuilder.Entity("MyLibrary.Domain.Models.Library", b =>
+                {
+                    b.HasOne("MyLibrary.Domain.Models.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Status");
+                });
+
             modelBuilder.Entity("MyLibrary.Domain.Models.Resume", b =>
                 {
                     b.HasOne("MyLibrary.Domain.Models.Book", "Book")
-                        .WithOne("Resume")
-                        .HasForeignKey("MyLibrary.Domain.Models.Resume", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("Resumes")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("MyLibrary.Domain.Models.ResumeType", "ResumeType")
@@ -240,7 +313,12 @@ namespace MyLibrary.Persistence.Migrations
 
             modelBuilder.Entity("MyLibrary.Domain.Models.Book", b =>
                 {
-                    b.Navigation("Resume");
+                    b.Navigation("Resumes");
+                });
+
+            modelBuilder.Entity("MyLibrary.Domain.Models.Library", b =>
+                {
+                    b.Navigation("Books");
                 });
 
             modelBuilder.Entity("MyLibrary.Domain.Models.Resume", b =>

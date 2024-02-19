@@ -17,7 +17,7 @@
     <ProjectReference Include="..\Library.Domain\MyLibrary.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\KeyPointFeature\" />
+    <Folder Include="Features\KeyPointFeature\Queries\" />
     <Folder Include="Features\MasterFeature\Queries\GetAllResumeType\" />
   </ItemGroup>
 

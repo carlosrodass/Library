@@ -25,5 +25,6 @@ namespace MyLibrary.Infrastructure.Logging
         {
             _logger.LogWarning(message, args);
         }
+
     }
 }

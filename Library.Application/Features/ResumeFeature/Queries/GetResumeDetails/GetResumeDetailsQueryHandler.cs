@@ -31,27 +31,29 @@ namespace MyLibrary.Application.Features.ResumeFeature.Queries.GetResumeDetails
 
         public async Task<Result<GetResumeDetailsDto, Error>> Handle(GetResumeDetailsQuery request, CancellationToken cancellationToken)
         {
-            var book = await _bookRepository.GetByIdAsync(request.BookId, GetIncludes());
-            if (book is null) { return Error.NotFound; }
+            //var book = await _bookRepository.GetByIdAsync(request.BookId, GetIncludes());
+            //if (book is null) { return Error.NotFound; }
 
-            var resumes = book.Resumes;
-            if (resumes is null) { return Error.NotFound; }
+            //var resumes = new List<GetAllResumesDto>();
+            //if (resumes is null) { return Error.NotFound; }
 
-            var resumeFound = resumes.FirstOrDefault(x => x.Id == request.Id);
-            if (resumeFound is null) { return Error.NotFound; }
+            //var resumeFound = resumes.FirstOrDefault(x => x.Id == request.Id);
+            //if (resumeFound is null) { return Error.NotFound; }
 
-            return _mapper.Map<GetResumeDetailsDto>(resumeFound);
+            //return _mapper.Map<GetResumeDetailsDto>(resumeFound);
+
+            throw new NotImplementedException();
         }
 
         #endregion
 
 
         #region Includes
-        private Func<IQueryable<Book>, IIncludableQueryable<Book, object>> GetIncludes()
-        {
-            return includes => includes
-                .Include(b => b.Resumes);
-        }
+        //private Func<IQueryable<Book>, IIncludableQueryable<Book, object>> GetIncludes()
+        //{
+        //    return includes => includes
+        //        .Include(b => b.Resumes);
+        //}
 
 
         #endregion
