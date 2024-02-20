@@ -39,7 +39,7 @@ public class CreateResumeCommandHandler : IRequestHandler<CreateResumeCommand, R
         var resultAddResume = book.AddBookResume(request.Title, request.Description, request.Content, request.ResumeTypeId, request.BookId);
         if (resultAddResume.IsFailure) { return resultAddResume.Error; }
 
-        await _bookRepository.UpdateAsync(book);
+        await _bookRepository.UpdateAsync(resultAddResume.Value);
         await _bookRepository.SaveChangesAsync();
 
         return book.Id;
@@ -50,6 +50,7 @@ public class CreateResumeCommandHandler : IRequestHandler<CreateResumeCommand, R
 
 
     #region Includes
+
     private Func<IQueryable<Book>, IIncludableQueryable<Book, object>> GetIncludes()
     {
         return includes => includes

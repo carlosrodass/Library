@@ -85,10 +85,23 @@ namespace MyLibrary.Domain.Models
 
             if (this.Resume is not null) { return Error.AlreadyExist; }
 
-            var result = Resume.Create(title, description, content, resumeTypeId, bookId);
+            var result = Resume.Create(title, description, content, resumeTypeId);
             if (result.IsFailure) { return result.Error; }
 
-            Resume = result.Value;
+            this.Resume = result.Value;
+
+            return this;
+        }
+
+        public Result<Book, Error> UpdateResume(string title, string description, string content)
+        {
+            if (Resume is null)
+            {
+                return Error.NotFound;
+            }
+
+            var resultUpdate = Resume.Update(title, description, content);
+            if (resultUpdate.IsFailure) { return resultUpdate.Error; }
 
             return this;
         }

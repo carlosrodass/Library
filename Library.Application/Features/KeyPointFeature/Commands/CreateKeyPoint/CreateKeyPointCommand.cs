@@ -12,6 +12,7 @@ namespace MyLibrary.Application.Features.KeyPointFeature.Commands.CreateKeyPoint
 {
     public class CreateKeyPointCommand : IRequest<Result<long, Error>>
     {
+        public long BookId { get; set; }
         public long ResumeId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

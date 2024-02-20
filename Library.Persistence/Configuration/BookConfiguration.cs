@@ -18,9 +18,8 @@ namespace MyLibrary.Persistence.Configuration
 
 
             builder.HasOne(x => x.Resume)
-                .WithOne(x => x.Book)
-                .HasForeignKey<Resume>(x => x.Id)
-                .IsRequired()
+                .WithOne()
+                .HasForeignKey<Resume>(oi => oi.Id)
                 .OnDelete(DeleteBehavior.Cascade);
 
 

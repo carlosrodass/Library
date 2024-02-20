@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using MyLibrary.Application.Contracts.Persistence;
 using MyLibrary.Domain.Common;
@@ -53,6 +54,7 @@ namespace MyLibrary.Persistence.Repositories
         public async Task UpdateAsync(T entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
+
         }
 
         public async Task AddRange(List<T> values)
@@ -69,7 +71,8 @@ namespace MyLibrary.Persistence.Repositories
 
         public virtual IQueryable<T> GetQuery(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes)
         {
-            IQueryable<T> query = Entities.AsNoTracking();
+            //IQueryable<T> query = Entities.AsNoTracking();
+            IQueryable<T> query = Entities.AsSplitQuery();
 
             if (includes != null)
             {

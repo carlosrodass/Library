@@ -5,6 +5,7 @@ using MyLibrary.Application.Contracts.Logging;
 using MyLibrary.Application.Contracts.Persistence;
 using MyLibrary.Application.Features.BookFeature.Commands.CreateBook;
 using MyLibrary.Domain.Common;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MyLibrary.Application.Features.KeyPointFeature.Commands.CreateKeyPoint
 {
@@ -33,11 +34,20 @@ namespace MyLibrary.Application.Features.KeyPointFeature.Commands.CreateKeyPoint
 
         public async Task<Result<long, Error>> Handle(CreateKeyPointCommand request, CancellationToken cancellationToken)
         {
-            //var book = await _bookRepository.GetAsync(x => x.Select(y => y.Resumes.Any(r => r.Id == request.ResumeId)));
+            var book = await _bookRepository.GetByIdAsync(request.BookId);
 
             throw new NotImplementedException();
         }
 
+
+        #endregion
+
+
+        #region Private methods
+
+        #endregion
+
+        #region Includes
 
         #endregion
     }

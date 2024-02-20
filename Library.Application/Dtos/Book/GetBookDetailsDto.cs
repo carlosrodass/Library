@@ -1,6 +1,7 @@
 ﻿
 using MyLibrary.Application.Dtos.Common;
 using MyLibrary.Application.Dtos.Resume;
+using MyLibrary.Domain.Models;
 
 namespace MyLibrary.Application.Dtos.Book
 {
@@ -16,8 +17,8 @@ namespace MyLibrary.Application.Dtos.Book
         public int Order { get; set; }
         public int StatusId { get; set; }
         public EnumerationDto Status { get; set; }
-        public long LibraryId { get; set; }
         public GetResumeDetailsDto Resume { get; set; }
+
     }
 
 }

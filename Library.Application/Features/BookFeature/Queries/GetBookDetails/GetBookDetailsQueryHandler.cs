@@ -34,8 +34,7 @@ public class GetBookDetailsQueryHandler : IRequestHandler<GetBookDetailsQuery, R
     private Func<IQueryable<Book>, IIncludableQueryable<Book, object>> GetIncludes()
     {
         return includes => includes
-            .Include(b => b.Status);
-        //.Include(b => b.LibraryBooks)
-        //    .ThenInclude(x => x.Library);
+            .Include(b => b.Status)
+            .Include(b => b.Resume);
     }
 }

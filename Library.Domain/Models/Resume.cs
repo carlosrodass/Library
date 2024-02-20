@@ -13,8 +13,7 @@ namespace MyLibrary.Domain.Models
         public string Content { get; private set; }
         public int ResumeTypeId { get; private set; }
         public ResumeType ResumeType { get; private set; }
-        public long BookId { get; private set; }
-        public Book Book { get; private set; }
+
 
         public readonly List<KeyPoint> _keyPoints;
         public IReadOnlyCollection<KeyPoint> KeyPoints => _keyPoints;
@@ -28,26 +27,25 @@ namespace MyLibrary.Domain.Models
             _keyPoints = new List<KeyPoint>();
         }
 
-        private Resume(string title, string description, string content, int resumeTypeId, long bookId)
+        private Resume(string title, string description, string content, int resumeTypeId)
         {
             Title = title;
             Description = description;
             Content = content;
             ResumeTypeId = resumeTypeId;
-            BookId = bookId;
         }
 
         #endregion
 
         #region Public methods
 
-        public static Result<Resume, Error> Create(string title, string description, string content, int resumeTypeId, long bookId)
+        public static Result<Resume, Error> Create(string title, string description, string content, int resumeTypeId)
         {
-            var result = CheckCreateRequiredFields(title, resumeTypeId, bookId);
+            var result = CheckCreateRequiredFields(title, resumeTypeId);
 
             if (result.IsFailure) { return result.Error; }
 
-            return new Resume(title, description, content, resumeTypeId, bookId);
+            return new Resume(title, description, content, resumeTypeId);
         }
 
         public Result<Resume, Error> Update(string title, string description, string content)
@@ -65,7 +63,7 @@ namespace MyLibrary.Domain.Models
 
         #region Private methods
 
-        private static Result<bool, Error> CheckCreateRequiredFields(string title, int resumeTypeId, long bookId)
+        private static Result<bool, Error> CheckCreateRequiredFields(string title, int resumeTypeId)
         {
             if (string.IsNullOrEmpty(title))
             {
@@ -77,10 +75,6 @@ namespace MyLibrary.Domain.Models
                 return false; //TODO: Change to RESULT Pattern
             }
 
-            if (bookId <= 0)
-            {
-                return false; //TODO: Change to RESULT Pattern
-            }
 
             return true;
         }

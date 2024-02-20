@@ -10,4 +10,4 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Application.Features.ResumeFeature.Queries.GetResumeDetails;
 
-public record GetResumeDetailsQuery(long Id, long BookId) : IRequest<Result<GetResumeDetailsDto, Error>>;
+public record GetResumeDetailsQuery(long BookId) : IRequest<Result<GetResumeDetailsDto, Error>>;

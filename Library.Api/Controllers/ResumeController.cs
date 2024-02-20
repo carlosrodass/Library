@@ -34,26 +34,13 @@ public class ResumeController : ControllerBase
 
     #region Resume
 
-
-    [HttpGet("book/{BookId:long}")]
+    [HttpGet("{BookId:long}/GetResumeByBookId")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<List<GetAllResumesDto>>> Get(long BookId)
+    public async Task<ActionResult<GetResumeDetailsDto>> GetResumeByBookIdAsync(long BookId)
     {
-        var result = await _mediator.Send(new GetAllResumesQuery(BookId));
-        if (result.IsFailure) { return BadRequest(result); }
-
-        return Ok(result);
-    }
-
-    [HttpGet("{Id:long}/book/{BookId:long}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesDefaultResponseType]
-    public async Task<ActionResult<GetResumeDetailsDto>> GetByIdAsync(long Id, long BookId)
-    {
-        var result = await _mediator.Send(new GetResumeDetailsQuery(Id, BookId));
+        var result = await _mediator.Send(new GetResumeDetailsQuery(BookId));
         if (result.IsFailure) { return BadRequest(result); }
 
         return Ok(result);
@@ -69,7 +56,7 @@ public class ResumeController : ControllerBase
         var result = await _mediator.Send(createResumeCommand);
         if (result.IsFailure) { return BadRequest(result); }
 
-        return CreatedAtAction(nameof(Get), new { id = result.Value });
+        return Ok(result);
     }
 
 
@@ -103,18 +90,18 @@ public class ResumeController : ControllerBase
 
     #region KeyPoints
 
-    [HttpPost("KeyPoint")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesDefaultResponseType]
-    public async Task<IActionResult> CreateKeyPointAsync(CreateResumeCommand createResumeCommand)
-    {
+    //[HttpPost("KeyPoint")]
+    //[ProducesResponseType(StatusCodes.Status201Created)]
+    //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+    //[ProducesDefaultResponseType]
+    //public async Task<IActionResult> CreateKeyPointAsync(CreateResumeCommand createResumeCommand)
+    //{
 
-        var result = await _mediator.Send(createResumeCommand);
-        if (result.IsFailure) { return BadRequest(result); }
+    //    var result = await _mediator.Send(createResumeCommand);
+    //    if (result.IsFailure) { return BadRequest(result); }
 
-        return CreatedAtAction(nameof(Get), new { id = result.Value });
-    }
+    //    return CreatedAtAction(nameof(Get), new { id = result.Value });
+    //}
 
 
     #endregion
