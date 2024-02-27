@@ -35,13 +35,13 @@ namespace MyLibrary.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id:long}")]
+        [HttpGet("{BookId:long}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<GetBookDetailsDto>> GetByIdAsync(int id)
+        public async Task<ActionResult<GetBookDetailsDto>> GetByIdAsync(long BookId)
         {
-            var result = await _mediator.Send(new GetBookDetailsQuery(id));
+            var result = await _mediator.Send(new GetBookDetailsQuery(BookId));
             if (result.IsFailure) { return BadRequest(result); }
 
             return Ok(result);
@@ -80,7 +80,7 @@ namespace MyLibrary.Api.Controllers
         [ProducesDefaultResponseType]
         public async Task<ActionResult> DeleteAsync(int id)
         {
-            var command = new DeleteBookCommand { Id = id };
+            var command = new DeleteBookCommand { BookId = id };
             var result = await _mediator.Send(command);
             if (result.IsFailure) { return BadRequest(result); }
             return NoContent();

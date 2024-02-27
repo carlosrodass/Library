@@ -20,16 +20,19 @@ namespace MyLibrary.Application.Features.BookFeature.Commands.UpdateBook
         }
         public async Task<Result<long, Error>> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
         {
-            var book = await _bookRepository.GetByIdAsync(request.Id);
+            var book = await _bookRepository.GetByIdAsync(request.BookId);
             if (book is null) { return Error.NotFound; }
 
-            var resultUpdate = book.Update(request.Title, request.AuthorName, request.Isbn, request.Price, request.ReleaseDate, request.Image, request.Order, request.StatusId);
-            if (resultUpdate.IsFailure) { return resultUpdate.Error; }
-            
-            await _bookRepository.UpdateAsync(book);
+            book.Title = request.Title;
+            book.AuthorName = request.AuthorName;
+            book.Isbn = request.Isbn;
+            book.Price = request.Price;
+
+            _bookRepository.Update(book);
             await _bookRepository.SaveChangesAsync();
 
-            return book.Id;
+            return book.BookId;
+
         }
     }
 }

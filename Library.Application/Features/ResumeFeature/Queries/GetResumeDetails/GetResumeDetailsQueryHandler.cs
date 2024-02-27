@@ -31,15 +31,17 @@ namespace MyLibrary.Application.Features.ResumeFeature.Queries.GetResumeDetails
 
         public async Task<Result<GetResumeDetailsDto, Error>> Handle(GetResumeDetailsQuery request, CancellationToken cancellationToken)
         {
-            var book = await _bookRepository.GetByIdAsync(request.BookId, GetIncludes());
-            if (book is null) { return Error.NotFound; }
+            //var book = await _bookRepository.GetByIdAsync(request.BookId);
+            //if (book is null) { return Error.NotFound; }
 
-            if (book.Resume is null)
-            {
-                return Error.NotFound;
-            }
+            //if (book.Resume is null)
+            //{
+            //    return Error.NotFound;
+            //}
 
-            return _mapper.Map<GetResumeDetailsDto>(book.Resume);
+            //return _mapper.Map<GetResumeDetailsDto>(book.Resume);
+
+            throw new NotImplementedException();
         }
 
         #endregion

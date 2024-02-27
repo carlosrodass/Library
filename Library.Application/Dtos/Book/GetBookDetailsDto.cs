@@ -7,7 +7,7 @@ namespace MyLibrary.Application.Dtos.Book
 {
     public class GetBookDetailsDto
     {
-        public long Id { get; set; }
+        public long BookId { get; set; }
         public string Title { get; set; }
         public string AuthorName { get; set; }
         public string Isbn { get; set; }

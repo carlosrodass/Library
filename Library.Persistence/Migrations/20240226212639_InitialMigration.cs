@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MyLibrary.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,7 +41,7 @@ namespace MyLibrary.Persistence.Migrations
                 name: "Books",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    BookId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AuthorName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -58,7 +58,7 @@ namespace MyLibrary.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.PrimaryKey("PK_Books", x => x.BookId);
                     table.ForeignKey(
                         name: "FK_Books_Status_StatusId",
                         column: x => x.StatusId,
@@ -68,43 +68,15 @@ namespace MyLibrary.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Libraries",
+                name: "Resumes",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AllBooksReaded = table.Column<bool>(type: "bit", nullable: false),
-                    Order = table.Column<int>(type: "int", nullable: false),
-                    StatusId = table.Column<int>(type: "int", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DateModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Libraries", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Libraries_Status_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "Status",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Resume",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    ResumeId = table.Column<long>(type: "bigint", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ResumeTypeId = table.Column<int>(type: "int", nullable: false),
-                    BookId = table.Column<long>(type: "bigint", nullable: false),
+                    BookId = table.Column<long>(type: "bigint", nullable: true),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DateModified = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -112,15 +84,15 @@ namespace MyLibrary.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Resume", x => x.Id);
+                    table.PrimaryKey("PK_Resumes", x => x.ResumeId);
                     table.ForeignKey(
-                        name: "FK_Resume_Books_Id",
-                        column: x => x.Id,
+                        name: "FK_Resumes_Books_ResumeId",
+                        column: x => x.ResumeId,
                         principalTable: "Books",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "BookId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Resume_ResumeTypes_ResumeTypeId",
+                        name: "FK_Resumes_ResumeTypes_ResumeTypeId",
                         column: x => x.ResumeTypeId,
                         principalTable: "ResumeTypes",
                         principalColumn: "Id",
@@ -128,40 +100,11 @@ namespace MyLibrary.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LibraryBooks",
+                name: "KeyPoints",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    KeyPointId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    LibraryId = table.Column<long>(type: "bigint", nullable: false),
-                    BookId = table.Column<long>(type: "bigint", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DateModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LibraryBooks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_LibraryBooks_Books_BookId",
-                        column: x => x.BookId,
-                        principalTable: "Books",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_LibraryBooks_Libraries_LibraryId",
-                        column: x => x.LibraryId,
-                        principalTable: "Libraries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "KeyPoint",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ResumeId = table.Column<long>(type: "bigint", nullable: false),
@@ -172,12 +115,12 @@ namespace MyLibrary.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_KeyPoint", x => x.Id);
+                    table.PrimaryKey("PK_KeyPoints", x => x.KeyPointId);
                     table.ForeignKey(
-                        name: "FK_KeyPoint_Resume_Id",
-                        column: x => x.Id,
-                        principalTable: "Resume",
-                        principalColumn: "Id",
+                        name: "FK_KeyPoints_Resumes_ResumeId",
+                        column: x => x.ResumeId,
+                        principalTable: "Resumes",
+                        principalColumn: "ResumeId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -205,23 +148,13 @@ namespace MyLibrary.Persistence.Migrations
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Libraries_StatusId",
-                table: "Libraries",
-                column: "StatusId");
+                name: "IX_KeyPoints_ResumeId",
+                table: "KeyPoints",
+                column: "ResumeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LibraryBooks_BookId",
-                table: "LibraryBooks",
-                column: "BookId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LibraryBooks_LibraryId",
-                table: "LibraryBooks",
-                column: "LibraryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Resume_ResumeTypeId",
-                table: "Resume",
+                name: "IX_Resumes_ResumeTypeId",
+                table: "Resumes",
                 column: "ResumeTypeId");
         }
 
@@ -229,16 +162,10 @@ namespace MyLibrary.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "KeyPoint");
+                name: "KeyPoints");
 
             migrationBuilder.DropTable(
-                name: "LibraryBooks");
-
-            migrationBuilder.DropTable(
-                name: "Resume");
-
-            migrationBuilder.DropTable(
-                name: "Libraries");
+                name: "Resumes");
 
             migrationBuilder.DropTable(
                 name: "Books");

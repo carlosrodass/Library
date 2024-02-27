@@ -15,16 +15,20 @@ public class CreateResumeCommandHandler : IRequestHandler<CreateResumeCommand, R
     #region Fields
 
     private readonly IBookRepository _bookRepository;
+    private readonly IResumeRepository _resumeRepository;
     private readonly IMapper _mapper;
 
     #endregion
 
     #region Builder
 
-    public CreateResumeCommandHandler(IBookRepository bookRepository, IMapper mapper)
+    public CreateResumeCommandHandler(IMapper mapper,
+                                      IBookRepository bookRepository,
+                                      IResumeRepository resumeRepository)
     {
-        _bookRepository = bookRepository;
         _mapper = mapper;
+        _bookRepository = bookRepository;
+        _resumeRepository = resumeRepository;
     }
 
     #endregion
@@ -33,28 +37,39 @@ public class CreateResumeCommandHandler : IRequestHandler<CreateResumeCommand, R
 
     public async Task<Result<long, Error>> Handle(CreateResumeCommand request, CancellationToken cancellationToken)
     {
-        var book = await _bookRepository.GetByIdAsync(request.BookId, GetIncludes());
-        if (book is null) { return Error.NotFound; }
+        var book = await _bookRepository.GetBookWithDetails(request.BookId);
 
-        var resultAddResume = book.AddBookResume(request.Title, request.Description, request.Content, request.ResumeTypeId, request.BookId);
-        if (resultAddResume.IsFailure) { return resultAddResume.Error; }
+        if (book is null)
+        {
+            return Error.NotFound;
+        }
 
-        await _bookRepository.UpdateAsync(resultAddResume.Value);
+        if (book.Resume != null)
+        {
+            return Error.AlreadyExist;
+        }
+
+        Resume resume = new()
+        {
+            Title = request.Title,
+            Description = request.Description,
+            Content = request.Content,
+            ResumeTypeId = request.ResumeTypeId,
+            BookId = book.BookId
+        };
+
+
+        await _resumeRepository.CreateAsync(resume);
+
+        book.Resume = resume;
+        _bookRepository.Update(book);
         await _bookRepository.SaveChangesAsync();
 
-        return book.Id;
 
-    }
+        await _resumeRepository.SaveChangesAsync();
 
-    #endregion
+        return resume.ResumeId;
 
-
-    #region Includes
-
-    private Func<IQueryable<Book>, IIncludableQueryable<Book, object>> GetIncludes()
-    {
-        return includes => includes
-            .Include(b => b.Resume);
     }
 
     #endregion

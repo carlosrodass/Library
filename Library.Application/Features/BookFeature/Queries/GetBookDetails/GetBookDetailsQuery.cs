@@ -10,6 +10,6 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Application.Features.BookFeature.Queries.GetBookDetails
 {
-    public record GetBookDetailsQuery(long Id) : IRequest<Result<GetBookDetailsDto, Error>>;
+    public record GetBookDetailsQuery(long BookId) : IRequest<Result<GetBookDetailsDto, Error>>;
 
 }

@@ -13,7 +13,7 @@ namespace MyLibrary.Application.Features.BookFeature.Commands.UpdateBook
 
     public class UpdateBookCommand : IRequest<Result<long, Error>>
     {
-        public long Id { get; set; }
+        public long BookId { get; set; }
         public string Title { get; set; }
         public string AuthorName { get; set; }
         public string Isbn { get; set; }

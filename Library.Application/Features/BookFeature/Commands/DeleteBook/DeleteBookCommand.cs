@@ -11,6 +11,6 @@ namespace MyLibrary.Application.Features.BookFeature.Commands.DeleteBook
 {
     public class DeleteBookCommand : IRequest<Result<Unit, Error>>
     {
-        public int Id { get; set; }
+        public int BookId { get; set; }
     }
 }

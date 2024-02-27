@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using MyLibrary.Application.Dtos;
 using MyLibrary.Application.Dtos.Book;
 using MyLibrary.Application.Dtos.Common;
+using MyLibrary.Application.Dtos.KeyPoint;
 using MyLibrary.Application.Dtos.Resume;
 using MyLibrary.Application.Features.BookFeature.Commands.CreateBook;
 using MyLibrary.Application.Features.BookFeature.Commands.UpdateBook;
@@ -20,6 +22,7 @@ namespace MyLibrary.Application.MappingProfiles
             CommonProfile();
             BookProfile();
             ResumeProfile();
+            KeyPointProfile();
         }
         private void CommonProfile()
         {
@@ -39,9 +42,15 @@ namespace MyLibrary.Application.MappingProfiles
         private void ResumeProfile()
         {
             CreateMap<Resume, GetResumeDetailsDto>();
+            CreateMap<KeyPoint, GetKeyPointDetailsDto>();
 
-            //CreateMap<KeyPoint, GetResumeDetailsDto>();
-            //CreateMap<KeyPoint, GetAllResumesDto>();
+        }
+
+        private void KeyPointProfile()
+        {
+            CreateMap<KeyPoint, GetKeyPointDetailsDto>();
+            CreateMap<KeyPoint, GetAllKeyPointsDto>();
+
 
         }
     }

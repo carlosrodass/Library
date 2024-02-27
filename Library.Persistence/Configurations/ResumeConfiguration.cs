@@ -13,13 +13,11 @@ namespace MyLibrary.Persistence.Configuration
     {
         public void Configure(EntityTypeBuilder<Resume> builder)
         {
-            builder.HasKey(e => e.Id);
+            builder.HasKey(e => e.ResumeId);
 
-            builder.HasMany(x => x.KeyPoints)
-                .WithOne(x => x.Resume)
-                .HasForeignKey(x => x.Id)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.HasQueryFilter(x => x.IsDeleted == false);
+
+
         }
     }
 }

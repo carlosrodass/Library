@@ -5,6 +5,7 @@ using MyLibrary.Application.Dtos.Resume;
 using MyLibrary.Application.Features.BookFeature.Commands.CreateBook;
 using MyLibrary.Application.Features.BookFeature.Commands.DeleteBook;
 using MyLibrary.Application.Features.BookFeature.Commands.UpdateBook;
+using MyLibrary.Application.Features.KeyPointFeature.Commands.CreateKeyPoint;
 using MyLibrary.Application.Features.ResumeFeature.Commands.CreateResume;
 using MyLibrary.Application.Features.ResumeFeature.Commands.DeleteResume;
 using MyLibrary.Application.Features.ResumeFeature.Commands.UpdateResume;
@@ -73,38 +74,22 @@ public class ResumeController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("{Id:long}/book/{BookId:long}")]
+    [HttpDelete("{ResumeId:long}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> DeleteAsync(long Id, long BookId)
+    public async Task<ActionResult> DeleteAsync(long ResumeId)
     {
-        var command = new DeleteResumeCommand { Id = Id, BookId = BookId };
+        var command = new DeleteResumeCommand { ResumeId = ResumeId };
+
         var result = await _mediator.Send(command);
         if (result.IsFailure) { return BadRequest(result); }
+
         return NoContent();
     }
 
     #endregion
 
-
-    #region KeyPoints
-
-    //[HttpPost("KeyPoint")]
-    //[ProducesResponseType(StatusCodes.Status201Created)]
-    //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-    //[ProducesDefaultResponseType]
-    //public async Task<IActionResult> CreateKeyPointAsync(CreateResumeCommand createResumeCommand)
-    //{
-
-    //    var result = await _mediator.Send(createResumeCommand);
-    //    if (result.IsFailure) { return BadRequest(result); }
-
-    //    return CreatedAtAction(nameof(Get), new { id = result.Value });
-    //}
-
-
-    #endregion
 
 
 

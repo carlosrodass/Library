@@ -19,8 +19,4 @@
     <ProjectReference Include="..\Library.Application\MyLibrary.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

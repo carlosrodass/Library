@@ -24,11 +24,11 @@ namespace MyLibrary.Persistence.Migrations
 
             modelBuilder.Entity("MyLibrary.Domain.Models.Book", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<long>("BookId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("BookId"));
 
                     b.Property<string>("AuthorName")
                         .HasColumnType("nvarchar(max)");
@@ -66,17 +66,20 @@ namespace MyLibrary.Persistence.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("BookId");
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("MyLibrary.Domain.Models.KeyPoint", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<long>("KeyPointId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("KeyPointId"));
 
                     b.Property<DateTime?>("DateCreated")
                         .HasColumnType("datetime2");
@@ -99,14 +102,19 @@ namespace MyLibrary.Persistence.Migrations
                     b.Property<long>("ResumeId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("Id");
+                    b.HasKey("KeyPointId");
 
-                    b.ToTable("KeyPoint");
+                    b.HasIndex("ResumeId");
+
+                    b.ToTable("KeyPoints", (string)null);
                 });
 
             modelBuilder.Entity("MyLibrary.Domain.Models.Resume", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<long>("ResumeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("BookId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Content")
@@ -133,11 +141,11 @@ namespace MyLibrary.Persistence.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("ResumeId");
 
                     b.HasIndex("ResumeTypeId");
 
-                    b.ToTable("Resume");
+                    b.ToTable("Resumes", (string)null);
                 });
 
             modelBuilder.Entity("MyLibrary.Domain.Models.ResumeType", b =>
@@ -152,7 +160,7 @@ namespace MyLibrary.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ResumeTypes");
+                    b.ToTable("ResumeTypes", (string)null);
 
                     b.HasData(
                         new
@@ -179,7 +187,7 @@ namespace MyLibrary.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Status");
+                    b.ToTable("Status", (string)null);
 
                     b.HasData(
                         new
@@ -209,7 +217,7 @@ namespace MyLibrary.Persistence.Migrations
                 {
                     b.HasOne("MyLibrary.Domain.Models.Resume", "Resume")
                         .WithMany("KeyPoints")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("ResumeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -218,17 +226,18 @@ namespace MyLibrary.Persistence.Migrations
 
             modelBuilder.Entity("MyLibrary.Domain.Models.Resume", b =>
                 {
-                    b.HasOne("MyLibrary.Domain.Models.Book", null)
+                    b.HasOne("MyLibrary.Domain.Models.Book", "Book")
                         .WithOne("Resume")
-                        .HasForeignKey("MyLibrary.Domain.Models.Resume", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MyLibrary.Domain.Models.Resume", "ResumeId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MyLibrary.Domain.Models.ResumeType", "ResumeType")
                         .WithMany()
                         .HasForeignKey("ResumeTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Book");
 
                     b.Navigation("ResumeType");
                 });

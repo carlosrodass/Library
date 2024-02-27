@@ -24,17 +24,9 @@ public class GetBookDetailsQueryHandler : IRequestHandler<GetBookDetailsQuery, R
     public async Task<Result<GetBookDetailsDto, Error>> Handle(GetBookDetailsQuery request, CancellationToken cancellationToken)
     {
 
-        var result = await _bookRepository.GetByIdAsync(request.Id, GetIncludes());
+        var result = await _bookRepository.GetBookWithDetails(request.BookId);
         if (result is null) { return Error.NotFound; }
         return _mapper.Map<GetBookDetailsDto>(result);
 
-    }
-
-
-    private Func<IQueryable<Book>, IIncludableQueryable<Book, object>> GetIncludes()
-    {
-        return includes => includes
-            .Include(b => b.Status)
-            .Include(b => b.Resume);
     }
 }

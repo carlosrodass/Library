@@ -11,6 +11,5 @@ namespace MyLibrary.Application.Features.ResumeFeature.Commands.DeleteResume;
 
 public class DeleteResumeCommand : IRequest<Result<Unit, Error>>
 {
-    public long Id { get; set; }
-    public long BookId { get; set; }
+    public long ResumeId { get; set; }
 }

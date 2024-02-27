@@ -14,16 +14,18 @@ public class DeleteResumeCommandHandler : IRequestHandler<DeleteResumeCommand, R
     #region Fields
 
     private readonly IBookRepository _bookRepository;
+    private readonly IResumeRepository _resumeRepository;
     private readonly IMapper _mapper;
 
     #endregion
 
     #region Builder
 
-    public DeleteResumeCommandHandler(IBookRepository bookRepository, IMapper mapper)
+    public DeleteResumeCommandHandler(IMapper mapper, IBookRepository bookRepository, IResumeRepository resumeRepository)
     {
-        _bookRepository = bookRepository;
         _mapper = mapper;
+        _bookRepository = bookRepository;
+        _resumeRepository = resumeRepository;
     }
 
     #endregion
@@ -32,16 +34,19 @@ public class DeleteResumeCommandHandler : IRequestHandler<DeleteResumeCommand, R
 
     public async Task<Result<Unit, Error>> Handle(DeleteResumeCommand request, CancellationToken cancellationToken)
     {
-        //var book = await _bookRepository.GetByIdAsync(request.BookId, GetIncludes());
+        var resume = await _resumeRepository.GetByIdAsync(request.ResumeId);
+        if (resume == null) { return Error.NotFound; }
+
+        _resumeRepository.Delete(resume);
+        await _resumeRepository.SaveChangesAsync();
+
+        //var book = await _bookRepository.GetByIdAsync(request.BookId);
         //if (book is null) { return Error.NotFound; }
 
-        //var resume = book.Resumes.FirstOrDefault(x => x.Id == request.Id);
-        //if (resume is null) { return Error.NotFound; }
-
-        //var result = book.RemoveResume(resume);
+        //var result = book.RemoveResume();
         //if (result.IsFailure) { return result.Error; }
 
-        //await _bookRepository.UpdateAsync(book);
+        //_bookRepository.UpdateAsync(book);
         //await _bookRepository.SaveChangesAsync();
 
         return new Unit();
@@ -51,11 +56,11 @@ public class DeleteResumeCommandHandler : IRequestHandler<DeleteResumeCommand, R
     #endregion
 
     #region Includes
-    //private Func<IQueryable<Book>, IIncludableQueryable<Book, object>> GetIncludes()
-    //{
-    //    return includes => includes
-    //        .Include(b => b.Resumes);
-    //}
+    private Func<IQueryable<Book>, IIncludableQueryable<Book, object>> GetIncludes()
+    {
+        return includes => includes
+            .Include(b => b.Resume);
+    }
 
     #endregion
 }

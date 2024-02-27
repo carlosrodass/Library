@@ -8,7 +8,7 @@ namespace MyLibrary.Application.Dtos.Resume
 {
     public class GetAllResumesDto
     {
-        public long Id { get; set; }
+        public long ResumeId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Content { get; set; }

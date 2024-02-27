@@ -20,13 +20,13 @@ public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, Result<
 
     public async Task<Result<List<GetAllBooksDto>, Error>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
     {
-        var booksList = await _bookRepository.GetAsync();
-        if (booksList.Count == 0)
+        var books = await _bookRepository.GetBooksWithDetails();
+        if (books.Count > 0)
         {
             return new List<GetAllBooksDto>();
         }
 
-        return _mapper.Map<List<GetAllBooksDto>>(booksList);
+        return _mapper.Map<List<GetAllBooksDto>>(books);
 
     }
 }

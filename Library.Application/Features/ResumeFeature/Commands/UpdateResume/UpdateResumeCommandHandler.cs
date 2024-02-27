@@ -32,16 +32,18 @@ namespace MyLibrary.Application.Features.ResumeFeature.Commands.UpdateResume
 
         public async Task<Result<long, Error>> Handle(UpdateResumeCommand request, CancellationToken cancellationToken)
         {
-            var book = await _bookRepository.GetByIdAsync(request.BookId, GetIncludes());
-            if (book is null) { return Error.NotFound; }
+            //var book = await _bookRepository.GetByIdAsync(request.BookId);
+            //if (book is null) { return Error.NotFound; }
 
-            var result = book.UpdateResume(request.Title, request.Description, request.Content);
-            if (result.IsFailure) { return result.Error; }
+            //var result = book.UpdateResume(request.Title, request.Description, request.Content);
+            //if (result.IsFailure) { return result.Error; }
 
-            await _bookRepository.UpdateAsync(result.Value);
-            await _bookRepository.SaveChangesAsync();
+            //_bookRepository.UpdateAsync(result.Value);
+            //await _bookRepository.SaveChangesAsync();
 
-            return result.Value.Id;
+            //return book.BookId;
+
+            throw new NotImplementedException();
         }
 
         #endregion

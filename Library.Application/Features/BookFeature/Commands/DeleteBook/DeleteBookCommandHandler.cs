@@ -17,10 +17,10 @@ namespace MyLibrary.Application.Features.BookFeature.Commands.DeleteBook
         public async Task<Result<Unit, Error>> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
         {
 
-            var bookToDelete = await _bookRepository.GetByIdAsync(request.Id);
+            var bookToDelete = await _bookRepository.GetByIdAsync(request.BookId);
             if (bookToDelete is null) { return Error.NotFound; }
 
-            await _bookRepository.DeleteAsync(bookToDelete);
+            _bookRepository.Delete(bookToDelete);
             await _bookRepository.SaveChangesAsync();
 
             return Unit.Value;
