@@ -18,15 +18,12 @@ namespace MyLibrary.Domain.Models
         public Status Status { get; set; }
         public int StatusId { get; set; }
         public Resume? Resume { get; set; }
-
+        public List<Hub> Hubs { get; set; }
+        public List<BookHub> BookHubs { get; set; }
 
         //public User User { get; set; }
 
         //public int UserId { get; set; }
 
-        //public override long GetEntityId()
-        //{
-        //    return BookId;
-        //}
     }
 }

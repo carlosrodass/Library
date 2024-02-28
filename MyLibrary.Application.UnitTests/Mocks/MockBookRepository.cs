@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using CSharpFunctionalExtensions;
+using Moq;
 using MyLibrary.Application.Contracts.Persistence;
 using MyLibrary.Domain.Models;
 using System;
@@ -67,7 +68,7 @@ namespace MyLibrary.Application.UnitTests.Mocks
 
             var mockRepo = new Mock<IBookRepository>();
 
-            mockRepo.Setup(r => r.GetAsync()).ReturnsAsync(Books);
+            mockRepo.Setup(r => r.GetBooksWithDetails()).ReturnsAsync(Books);
 
             mockRepo.Setup(r => r.CreateAsync(It.IsAny<Book>()))
                 .Returns((Book book) =>
@@ -75,6 +76,9 @@ namespace MyLibrary.Application.UnitTests.Mocks
                     Books.Add(book);
                     return Task.CompletedTask;
                 });
+
+
+            return mockRepo;
         }
     }
 }

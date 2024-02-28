@@ -19,11 +19,13 @@ namespace MyLibrary.Persistence.DataBaseContext
 
 
         }
+
+        public DbSet<Hub> Hubs { get; set; }
+        public DbSet<Book> Books { get; set; }
         public DbSet<KeyPoint> KeyPoints { get; set; }
         public DbSet<Resume> Resumes { get; set; }
         public DbSet<ResumeType> ResumeTypes { get; set; }
         public DbSet<Status> Status { get; set; }
-        public DbSet<Book> Books { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
