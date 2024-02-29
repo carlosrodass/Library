@@ -57,7 +57,7 @@ namespace MyLibrary.Api.Controllers
             var result = await _mediator.Send(createBookCommand);
             if (result.IsFailure) { return BadRequest(result); }
 
-            return CreatedAtAction(nameof(Get), new { id = result });
+            return CreatedAtAction("GetByIdAsync", result.Value);
         }
 
 

@@ -2,6 +2,7 @@
 using MyLibrary.Application.Dtos;
 using MyLibrary.Application.Dtos.Book;
 using MyLibrary.Application.Dtos.Common;
+using MyLibrary.Application.Dtos.Hub;
 using MyLibrary.Application.Dtos.KeyPoint;
 using MyLibrary.Application.Dtos.Resume;
 using MyLibrary.Application.Features.BookFeature.Commands.CreateBook;
@@ -20,6 +21,7 @@ namespace MyLibrary.Application.MappingProfiles
         public MappingProfiles()
         {
             CommonProfile();
+            HubProfile();
             BookProfile();
             ResumeProfile();
             KeyPointProfile();
@@ -28,6 +30,12 @@ namespace MyLibrary.Application.MappingProfiles
         {
             CreateMap<Status, EnumerationDto>();
             CreateMap<ResumeType, EnumerationDto>();
+        }
+
+        private void HubProfile()
+        {
+            CreateMap<Hub, GetAllHubsDto>();
+            CreateMap<Hub, GetHubDetailsDto>();
         }
         private void BookProfile()
         {
@@ -50,8 +58,6 @@ namespace MyLibrary.Application.MappingProfiles
         {
             CreateMap<KeyPoint, GetKeyPointDetailsDto>();
             CreateMap<KeyPoint, GetAllKeyPointsDto>();
-
-
         }
     }
 }
