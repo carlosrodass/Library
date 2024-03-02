@@ -1,6 +1,7 @@
 
 using MyLibrary.Api.Middleware;
 using MyLibrary.Application;
+using MyLibrary.Identity;
 using MyLibrary.Infrastructure;
 using MyLibrary.Persistence;
 
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationService();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddPersistenceServices(builder.Configuration);
+builder.Services.AddIdentityServices(builder.Configuration);
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -41,6 +43,8 @@ app.UseHttpsRedirection();
 
 app.UseCors("all");
 
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

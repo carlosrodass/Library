@@ -11,6 +11,11 @@ namespace MyLibrary.Domain.Common
     {
         public static readonly Error None = new(string.Empty, string.Empty);
 
+
+
+        public static readonly Error EmailNotFound = new Error("EmailNotFound", "Email not found");
+        public static readonly Error ErrorPassword = new Error("ErrorPassword", "Password not valid");
+
         public static readonly Error NotFound = new Error
             ("NotFound", "Not found");
 

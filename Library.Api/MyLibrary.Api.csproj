@@ -20,6 +20,7 @@
     <ProjectReference Include="..\Library.Application\MyLibrary.Application.csproj" />
     <ProjectReference Include="..\Library.Infrastructure\MyLibrary.Infrastructure.csproj" />
     <ProjectReference Include="..\Library.Persistence\MyLibrary.Persistence.csproj" />
+    <ProjectReference Include="..\MyLibrary.Identity\MyLibrary.Identity.csproj" />
   </ItemGroup>
 
 </Project>

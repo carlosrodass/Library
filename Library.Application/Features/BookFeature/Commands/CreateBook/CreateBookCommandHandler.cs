@@ -36,7 +36,7 @@ namespace MyLibrary.Application.Features.BookFeature.Commands.CreateBook
         public async Task<Result<long, Error>> Handle(CreateBookCommand request, CancellationToken cancellationToken)
         {
 
-            Book book = new Book()
+            Book book = new()
             {
                 Title = request.Title,
                 AuthorName = request.AuthorName,

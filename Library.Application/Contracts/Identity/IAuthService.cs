@@ -1,4 +1,6 @@
-﻿using MyLibrary.Application.Models.Identity;
+﻿using CSharpFunctionalExtensions;
+using MyLibrary.Application.Models.Identity;
+using MyLibrary.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ namespace MyLibrary.Application.Contracts.Identity
 {
     public interface IAuthService
     {
-        Task<AuthResponse> Login(AuthRequest request);
-        Task<RegistrationResponse> Register(RegistrationRequest request);
+        Task<Result<AuthResponse, Error>> Login(AuthRequest request);
+        Task<Result<RegistrationResponse, Error>> Register(RegistrationRequest request);
     }
 }
