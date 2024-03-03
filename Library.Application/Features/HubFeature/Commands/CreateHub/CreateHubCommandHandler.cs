@@ -19,6 +19,7 @@ namespace MyLibrary.Application.Features.HubFeature.Commands.CreateHub
 
             var hub = new Hub()
             {
+                UserId = request.UserId,
                 Name = request.Name,
                 Description = request.Description,
                 Image = request.Image,

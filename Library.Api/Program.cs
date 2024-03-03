@@ -39,7 +39,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 
 
-    // Requiere un esquema de seguridad global para Swagger UI
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {

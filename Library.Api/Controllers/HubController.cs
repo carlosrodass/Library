@@ -8,6 +8,9 @@ using MyLibrary.Application.Features.HubFeature.Commands.AddBookToHub;
 using MyLibrary.Application.Features.HubFeature.Commands.CreateHub;
 using MyLibrary.Application.Features.HubFeature.Queries.GetAllHubs;
 using MyLibrary.Application.Features.HubFeature.Queries.GetHubDetails;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.Security.Claims;
+using MyLibrary.Application.Models.Identity;
 
 namespace MyLibrary.Api.Controllers
 {
@@ -28,6 +31,8 @@ namespace MyLibrary.Api.Controllers
         [ProducesDefaultResponseType]
         public async Task<ActionResult<List<GetAllHubsDto>>> GetAllAsync()
         {
+            //createHubCommand.UserId = GetUserClaims();
+
             var result = await _mediator.Send(new GetAllHubsQuery());
             if (result.IsFailure) { return BadRequest(result); }
 
@@ -40,6 +45,8 @@ namespace MyLibrary.Api.Controllers
         [ProducesDefaultResponseType]
         public async Task<ActionResult<GetHubDetailsDto>> GetByIdAsync(long HubId)
         {
+            //createHubCommand.UserId = GetUserClaims();
+
             var result = await _mediator.Send(new GetHubDetailsQuery(HubId));
             if (result.IsFailure) { return BadRequest(result); }
             return Ok(result);
@@ -52,6 +59,7 @@ namespace MyLibrary.Api.Controllers
         [ProducesDefaultResponseType]
         public async Task<IActionResult> CreateAsync(CreateHubCommand createHubCommand)
         {
+            createHubCommand.UserId = GetUserClaims();
 
             var result = await _mediator.Send(createHubCommand);
             if (result.IsFailure) { return BadRequest(result); }
@@ -71,5 +79,17 @@ namespace MyLibrary.Api.Controllers
 
             return Ok(result);
         }
+
+
+        #region Private
+
+        private string? GetUserClaims()
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "uid");
+            return userIdClaim?.Value;
+
+        }
+
+        #endregion
     }
 }

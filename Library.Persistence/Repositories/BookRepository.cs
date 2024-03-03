@@ -18,9 +18,6 @@ namespace MyLibrary.Persistence.Repositories
 
         }
 
-
-
-
         public async Task<List<Book>> GetBooksWithDetails()
         {
             var books = await _context.Books

@@ -15,6 +15,7 @@ namespace MyLibrary.Application.Features.HubFeature.Commands.CreateHub
         public string Description { get; set; }
         public string Image { get; set; }
         public int StatusId { get; set; }
+        public string UserId { get; set; }
 
     }
 }
