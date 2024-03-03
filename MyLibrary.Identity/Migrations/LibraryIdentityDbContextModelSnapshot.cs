@@ -52,14 +52,14 @@ namespace MyLibrary.Identity.Migrations
                         new
                         {
                             Id = "f2b29f6c-8d2e-45a6-9d8c-3f54fe34913d",
-                            ConcurrencyStamp = "5c304735-0776-4b75-a9ac-715b8cba8586",
+                            ConcurrencyStamp = "6f3eb047-4e38-4809-a0b3-41ed32bb6399",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "5ce79a81-4a6f-4c88-bf7a-4b1dd2f273fb",
-                            ConcurrencyStamp = "e95778bc-64c0-415f-94a8-0db55afb2307",
+                            ConcurrencyStamp = "7ac269b5-5d39-47fc-b54f-7575dd26114c",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -203,11 +203,9 @@ namespace MyLibrary.Identity.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -260,7 +258,7 @@ namespace MyLibrary.Identity.Migrations
                         {
                             Id = "a7e1c3d0-9b25-4788-82f3-2c6d59a5d18d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e452a903-d870-4629-83ab-cb9c18214628",
+                            ConcurrencyStamp = "856328ca-177b-47d1-ab7e-8ac09b627755",
                             Email = "admin@localhost.com",
                             EmailConfirmed = true,
                             FirstName = "System",
@@ -268,9 +266,9 @@ namespace MyLibrary.Identity.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAECpUczk2p+7Gypp2iYrDJROgTvuDVgoVHidsh/BzWFspyf3HgYsJZhIrAwP53jBgEQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEItWD9+zJLbsbRKjH15L6NedQ4V6vHr2KXbhUKkCxTYuHzn4WTJA6/P2RSQkPMXjtQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2fa4e7d9-5a8f-4590-8119-efc48dbc09b8",
+                            SecurityStamp = "90e34f4f-a4cc-4bee-b999-3c86ba3ee860",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         },
@@ -278,7 +276,7 @@ namespace MyLibrary.Identity.Migrations
                         {
                             Id = "6f4e2f7b-150d-43af-8d8b-1e5e9962c0fd",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5aa4765a-9ed1-4f57-b1b3-91b99179e184",
+                            ConcurrencyStamp = "c0ceb60f-759c-4eab-a5b5-a0fa850c8ff6",
                             Email = "user@localhost.com",
                             EmailConfirmed = true,
                             FirstName = "System",
@@ -286,9 +284,9 @@ namespace MyLibrary.Identity.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@LOCALHOST.COM",
                             NormalizedUserName = "USER@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEL0i06mKKCcbxJMOPVeiU+eSdiG2llbKaCj9/70Mw59niJYvpsW/5z8g7mmHVxE7PQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOg8Bwdc6oPNV88KroWk0XBs2TN5tU/O0AwGWU5+zE7XghSjqoUCN9uins9xKUiMpw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2f6ca9ff-b362-40a0-b0e9-4cdeea63cccf",
+                            SecurityStamp = "5438d356-5017-4075-8a8c-29d42d6d4c89",
                             TwoFactorEnabled = false,
                             UserName = "user@localhost.com"
                         });

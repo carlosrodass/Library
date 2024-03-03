@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MyLibrary.Identity.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialIdentityMigration : Migration
+    public partial class InitialIdentity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,8 +32,8 @@ namespace MyLibrary.Identity.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -165,8 +165,8 @@ namespace MyLibrary.Identity.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "5ce79a81-4a6f-4c88-bf7a-4b1dd2f273fb", "e95778bc-64c0-415f-94a8-0db55afb2307", "User", "USER" },
-                    { "f2b29f6c-8d2e-45a6-9d8c-3f54fe34913d", "5c304735-0776-4b75-a9ac-715b8cba8586", "Administrator", "ADMINISTRATOR" }
+                    { "5ce79a81-4a6f-4c88-bf7a-4b1dd2f273fb", "7ac269b5-5d39-47fc-b54f-7575dd26114c", "User", "USER" },
+                    { "f2b29f6c-8d2e-45a6-9d8c-3f54fe34913d", "6f3eb047-4e38-4809-a0b3-41ed32bb6399", "Administrator", "ADMINISTRATOR" }
                 });
 
             migrationBuilder.InsertData(
@@ -174,8 +174,8 @@ namespace MyLibrary.Identity.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "6f4e2f7b-150d-43af-8d8b-1e5e9962c0fd", 0, "5aa4765a-9ed1-4f57-b1b3-91b99179e184", "user@localhost.com", true, "System", "User", false, null, "USER@LOCALHOST.COM", "USER@LOCALHOST.COM", "AQAAAAEAACcQAAAAEL0i06mKKCcbxJMOPVeiU+eSdiG2llbKaCj9/70Mw59niJYvpsW/5z8g7mmHVxE7PQ==", null, false, "2f6ca9ff-b362-40a0-b0e9-4cdeea63cccf", false, "user@localhost.com" },
-                    { "a7e1c3d0-9b25-4788-82f3-2c6d59a5d18d", 0, "e452a903-d870-4629-83ab-cb9c18214628", "admin@localhost.com", true, "System", "Admin", false, null, "ADMIN@LOCALHOST.COM", "ADMIN@LOCALHOST.COM", "AQAAAAEAACcQAAAAECpUczk2p+7Gypp2iYrDJROgTvuDVgoVHidsh/BzWFspyf3HgYsJZhIrAwP53jBgEQ==", null, false, "2fa4e7d9-5a8f-4590-8119-efc48dbc09b8", false, "admin@localhost.com" }
+                    { "6f4e2f7b-150d-43af-8d8b-1e5e9962c0fd", 0, "c0ceb60f-759c-4eab-a5b5-a0fa850c8ff6", "user@localhost.com", true, "System", "User", false, null, "USER@LOCALHOST.COM", "USER@LOCALHOST.COM", "AQAAAAEAACcQAAAAEOg8Bwdc6oPNV88KroWk0XBs2TN5tU/O0AwGWU5+zE7XghSjqoUCN9uins9xKUiMpw==", null, false, "5438d356-5017-4075-8a8c-29d42d6d4c89", false, "user@localhost.com" },
+                    { "a7e1c3d0-9b25-4788-82f3-2c6d59a5d18d", 0, "856328ca-177b-47d1-ab7e-8ac09b627755", "admin@localhost.com", true, "System", "Admin", false, null, "ADMIN@LOCALHOST.COM", "ADMIN@LOCALHOST.COM", "AQAAAAEAACcQAAAAEItWD9+zJLbsbRKjH15L6NedQ4V6vHr2KXbhUKkCxTYuHzn4WTJA6/P2RSQkPMXjtQ==", null, false, "90e34f4f-a4cc-4bee-b999-3c86ba3ee860", false, "admin@localhost.com" }
                 });
 
             migrationBuilder.InsertData(
