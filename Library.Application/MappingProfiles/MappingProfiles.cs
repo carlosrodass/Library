@@ -5,59 +5,46 @@ using MyLibrary.Application.Dtos.Common;
 using MyLibrary.Application.Dtos.Hub;
 using MyLibrary.Application.Dtos.KeyPoint;
 using MyLibrary.Application.Dtos.Resume;
-using MyLibrary.Application.Features.BookFeature.Commands.CreateBook;
-using MyLibrary.Application.Features.BookFeature.Commands.UpdateBook;
 using MyLibrary.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MyLibrary.Application.MappingProfiles
+namespace MyLibrary.Application.MappingProfiles;
+
+public class MappingProfiles : Profile
 {
-    public class MappingProfiles : Profile
+    public MappingProfiles()
     {
-        public MappingProfiles()
-        {
-            CommonProfile();
-            HubProfile();
-            BookProfile();
-            ResumeProfile();
-            KeyPointProfile();
-        }
-        private void CommonProfile()
-        {
-            CreateMap<Status, EnumerationDto>();
-            CreateMap<ResumeType, EnumerationDto>();
-        }
+        CommonProfile();
+        HubProfile();
+        BookProfile();
+        ResumeProfile();
+        KeyPointProfile();
+    }
+    private void CommonProfile()
+    {
+        CreateMap<Status, EnumerationDto>();
+        CreateMap<ResumeType, EnumerationDto>();
+    }
 
-        private void HubProfile()
-        {
-            CreateMap<Hub, GetAllHubsDto>();
-            CreateMap<Hub, GetHubDetailsDto>();
-        }
-        private void BookProfile()
-        {
+    private void HubProfile()
+    {
+        CreateMap<Hub, HubDto>();
+    }
+    private void BookProfile()
+    {
 
-            CreateMap<Book, GetAllBooksDto>();
-            CreateMap<Book, GetBookDetailsDto>();
+        CreateMap<Book, BookDto>();
+    }
 
-            CreateMap<CreateBookCommand, Book>();
-            CreateMap<UpdateBookCommand, Book>();
-        }
+    private void ResumeProfile()
+    {
+        CreateMap<Resume, GetResumeDetailsDto>();
+        CreateMap<KeyPoint, GetKeyPointDetailsDto>();
 
-        private void ResumeProfile()
-        {
-            CreateMap<Resume, GetResumeDetailsDto>();
-            CreateMap<KeyPoint, GetKeyPointDetailsDto>();
+    }
 
-        }
-
-        private void KeyPointProfile()
-        {
-            CreateMap<KeyPoint, GetKeyPointDetailsDto>();
-            CreateMap<KeyPoint, GetAllKeyPointsDto>();
-        }
+    private void KeyPointProfile()
+    {
+        CreateMap<KeyPoint, GetKeyPointDetailsDto>();
+        CreateMap<KeyPoint, GetAllKeyPointsDto>();
     }
 }

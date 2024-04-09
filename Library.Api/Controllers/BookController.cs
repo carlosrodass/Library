@@ -1,91 +1,95 @@
 ﻿
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyLibrary.Api.ViewModels.Book;
 using MyLibrary.Application.Dtos.Book;
-using MyLibrary.Application.Features.BookFeature.Commands.CreateBook;
-using MyLibrary.Application.Features.BookFeature.Commands.DeleteBook;
-using MyLibrary.Application.Features.BookFeature.Commands.UpdateBook;
-using MyLibrary.Application.Features.BookFeature.Queries.GetAllBooks;
-using MyLibrary.Application.Features.BookFeature.Queries.GetBookDetails;
+using MyLibrary.Application.Services.Abstract.BookService;
 
 namespace MyLibrary.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class BookController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IBookService _bookService;
+        private readonly IMapper _mapper;
 
-        public BookController(IMediator mediator)
+        public BookController(IBookService bookService, IMapper mapper)
         {
-            this._mediator = mediator;
+            _bookService = bookService;
+            _mapper = mapper;
         }
 
 
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet("GetAllByHub/{hubId:long}")]
+        [ProducesResponseType(typeof(List<BookViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<List<GetAllBooksDto>>> Get()
+        public async Task<ActionResult<List<BookViewModel>>> GetAllByHub(long hubId)
         {
-            var result = await _mediator.Send(new GetAllBooksQuery());
+
+            var result = await _bookService.GetAllBooksByHubId(hubId);
             if (result.IsFailure) { return BadRequest(result); }
 
-            return Ok(result);
+            return Ok(_mapper.Map<List<BookViewModel>>(result.Value));
         }
 
-        [HttpGet("{BookId:long}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet("{bookId:long}")]
+        [ProducesResponseType(typeof(BookViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<GetBookDetailsDto>> GetByIdAsync(long BookId)
+        public async Task<ActionResult<BookViewModel>> GetByIdAsync(long bookId)
         {
-            var result = await _mediator.Send(new GetBookDetailsQuery(BookId));
+
+            var result = await _bookService.GetBookByIdAsync(bookId);
             if (result.IsFailure) { return BadRequest(result); }
 
-            return Ok(result);
+            return Ok(_mapper.Map<BookViewModel>(result.Value));
         }
 
         [HttpPost()]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(BookViewModel), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> CreateAsync(CreateBookCommand createBookCommand)
+        public async Task<IActionResult> CreateAsync(BookInViewModel bookInViewModel)
         {
 
-            var result = await _mediator.Send(createBookCommand);
+
+            BookDto bookDto = _mapper.Map<BookDto>(bookInViewModel);
+            var result = await _bookService.CreateAsync(bookDto);
             if (result.IsFailure) { return BadRequest(result); }
 
-            return CreatedAtAction("GetByIdAsync", result.Value);
+            return Ok(_mapper.Map<BookViewModel>(result.Value));
         }
 
 
         [HttpPut()]
+        [ProducesResponseType(typeof(BookViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> UpdateAsync(BookUpdateViewModel bookUpdateViewModel)
+        {
+            BookDto bookDto = _mapper.Map<BookDto>(bookUpdateViewModel);
+            var result = await _bookService.UpdateAsync(bookDto);
+            if (result.IsFailure) { return BadRequest(result); }
+
+            return Ok(_mapper.Map<BookViewModel>(result.Value));
+        }
+
+        [HttpDelete("{bookId:long}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> UpdateAsync(UpdateBookCommand updateBookCommand)
+        public async Task<ActionResult> DeleteAsync(long bookId)
         {
-
-            var result = await _mediator.Send(updateBookCommand);
+            var result = await _bookService.DeleteAsync(bookId);
             if (result.IsFailure) { return BadRequest(result); }
 
             return Ok(result);
-        }
-
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesDefaultResponseType]
-        public async Task<ActionResult> DeleteAsync(int id)
-        {
-            var command = new DeleteBookCommand { BookId = id };
-            var result = await _mediator.Send(command);
-            if (result.IsFailure) { return BadRequest(result); }
-            return NoContent();
         }
 
     }

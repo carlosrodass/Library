@@ -1,4 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MyLibrary.Application.Services.Abstract.BookService;
+using MyLibrary.Application.Services.Abstract.HubService;
+using MyLibrary.Application.Services.Concrete.BookService;
+using MyLibrary.Application.Services.Concrete.HubService;
+using MyLibrary.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +21,10 @@ namespace MyLibrary.Application
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IHubService, HubService>();
 
             return services;
         }

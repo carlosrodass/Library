@@ -68,7 +68,7 @@ namespace MyLibrary.Application.UnitTests.Mocks
 
             var mockRepo = new Mock<IBookRepository>();
 
-            mockRepo.Setup(r => r.GetBooksWithDetails()).ReturnsAsync(Books);
+            mockRepo.Setup(r => r.GetBooksByHubId(1)).ReturnsAsync(Books);
 
             mockRepo.Setup(r => r.CreateAsync(It.IsAny<Book>()))
                 .Returns((Book book) =>

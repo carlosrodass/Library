@@ -17,8 +17,6 @@
     <ProjectReference Include="..\Library.Domain\MyLibrary.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\HubFeature\Commands\DeleteHub\" />
-    <Folder Include="Features\HubFeature\Commands\UpdateHub\" />
     <Folder Include="Features\MasterFeature\Queries\GetAllResumeType\" />
   </ItemGroup>
 

@@ -18,12 +18,13 @@ namespace MyLibrary.Persistence.Repositories
 
         }
 
-        public async Task<List<Book>> GetBooksWithDetails()
+        public async Task<List<Book>> GetBooksByHubId(long hubId)
         {
             var books = await _context.Books
                .Include(q => q.Resume)
                .ThenInclude(q => q.KeyPoints)
-               .Where(e => !e.IsDeleted)
+               .Include(q => q.BookHubs)
+               .Where(e => !e.IsDeleted && e.BookHubs.Any(x => x.HubId == hubId))
                .ToListAsync();
 
             return books;

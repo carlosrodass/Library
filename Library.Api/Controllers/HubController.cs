@@ -1,95 +1,93 @@
-﻿using MediatR;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyLibrary.Api.ViewModels.Hub;
 using MyLibrary.Application.Dtos.Hub;
-using MyLibrary.Application.Features.BookFeature.Commands.CreateBook;
-using MyLibrary.Application.Features.HubFeature.Commands.AddBookToHub;
-using MyLibrary.Application.Features.HubFeature.Commands.CreateHub;
-using MyLibrary.Application.Features.HubFeature.Queries.GetAllHubs;
-using MyLibrary.Application.Features.HubFeature.Queries.GetHubDetails;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using System.Security.Claims;
-using MyLibrary.Application.Models.Identity;
+using MyLibrary.Application.Services.Abstract.HubService;
 
-namespace MyLibrary.Api.Controllers
+
+namespace MyLibrary.Api.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+//[Authorize]
+public class HubController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
-    public class HubController : ControllerBase
+    private readonly IHubService _hubService;
+    private readonly IMapper _mapper;
+    public HubController(IHubService hubService, IMapper mapper)
     {
-        private readonly IMediator _mediator;
-        public HubController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesDefaultResponseType]
-        public async Task<ActionResult<List<GetAllHubsDto>>> GetAllAsync()
-        {
-            //createHubCommand.UserId = GetUserClaims();
-
-            var result = await _mediator.Send(new GetAllHubsQuery());
-            if (result.IsFailure) { return BadRequest(result); }
-
-            return Ok(result);
-        }
-
-        [HttpGet("ById/{HubId:long}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesDefaultResponseType]
-        public async Task<ActionResult<GetHubDetailsDto>> GetByIdAsync(long HubId)
-        {
-            //createHubCommand.UserId = GetUserClaims();
-
-            var result = await _mediator.Send(new GetHubDetailsQuery(HubId));
-            if (result.IsFailure) { return BadRequest(result); }
-            return Ok(result);
-        }
-
-
-        [HttpPost()]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesDefaultResponseType]
-        public async Task<IActionResult> CreateAsync(CreateHubCommand createHubCommand)
-        {
-            createHubCommand.UserId = GetUserClaims();
-
-            var result = await _mediator.Send(createHubCommand);
-            if (result.IsFailure) { return BadRequest(result); }
-
-            return Ok(result);
-        }
-
-        [HttpPut("AddBookToHub")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesDefaultResponseType]
-        public async Task<IActionResult> AddBookToHubAsync(AddBookToHubCommand addBookToHubCommand)
-        {
-
-            var result = await _mediator.Send(addBookToHubCommand);
-            if (result.IsFailure) { return BadRequest(result); }
-
-            return Ok(result);
-        }
-
-
-        #region Private
-
-        private string? GetUserClaims()
-        {
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "uid");
-            return userIdClaim?.Value;
-
-        }
-
-        #endregion
+        _hubService = hubService;
+        _mapper = mapper;
     }
+
+    [HttpGet("GetAllHubs")]
+    [ProducesResponseType(typeof(List<HubViewModel>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<List<HubViewModel>>> GetAllHubsAsync()
+
+    {
+        string userId = GetUserClaims();
+        var result = await _hubService.GetAllHubsByUserIdAsync(userId);
+        if (result.IsFailure) { return BadRequest(result); }
+
+        return Ok(_mapper.Map<List<HubViewModel>>(result.Value));
+    }
+
+    [HttpGet("ById/{hubId:long}")]
+    [ProducesResponseType(typeof(HubViewModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<HubViewModel>> GetByIdAsync(long hubId)
+    {
+        string? userId = GetUserClaims();
+        var result = await _hubService.GetHubByIdAsync(hubId, userId);
+        if (result.IsFailure) { return BadRequest(result); }
+        return Ok(_mapper.Map<HubViewModel>(result.Value));
+    }
+
+
+    [HttpPost()]
+    [ProducesResponseType(typeof(HubViewModel), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> CreateAsync(HubInViewModel hubInViewModel)
+    {
+        string? userId = GetUserClaims();
+        HubDto hubDto = _mapper.Map<HubDto>(hubInViewModel);
+        hubDto.UserId = userId;
+        var result = await _hubService.CreateAsync(hubDto);
+        if (result.IsFailure) { return BadRequest(result); }
+
+        return Ok(_mapper.Map<HubViewModel>(result.Value));
+    }
+
+    [HttpPut("AddBookToHub")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> AddBookToHubAsync()
+    {
+
+        //var result = await _mediator.Send(addBookToHubCommand);
+        //if (result.IsFailure) { return BadRequest(result); }
+
+        //return Ok(result);
+
+        throw new NotImplementedException();
+    }
+
+
+    #region Private
+
+    private string? GetUserClaims()
+    {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "uid");
+
+        return userIdClaim?.Value;
+
+    }
+
+    #endregion
 }

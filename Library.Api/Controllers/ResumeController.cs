@@ -1,16 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyLibrary.Application.Dtos.Resume;
-using MyLibrary.Application.Features.BookFeature.Commands.CreateBook;
-using MyLibrary.Application.Features.BookFeature.Commands.DeleteBook;
-using MyLibrary.Application.Features.BookFeature.Commands.UpdateBook;
-using MyLibrary.Application.Features.KeyPointFeature.Commands.CreateKeyPoint;
 using MyLibrary.Application.Features.ResumeFeature.Commands.CreateResume;
 using MyLibrary.Application.Features.ResumeFeature.Commands.DeleteResume;
 using MyLibrary.Application.Features.ResumeFeature.Commands.UpdateResume;
-using MyLibrary.Application.Features.ResumeFeature.Queries.GetAllResumes;
 using MyLibrary.Application.Features.ResumeFeature.Queries.GetResumeDetails;
 
 namespace MyLibrary.Api.Controllers;

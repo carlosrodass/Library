@@ -9,7 +9,7 @@ namespace MyLibrary.Application.Contracts.Persistence
 {
     public interface IHubRepository : IGenericRepository<Hub>
     {
-        Task<List<Hub>> GetHubsWithDetails();
-        Task<Hub> GetHubWithDetails(long hubId);
+        Task<List<Hub>> GetHubsWithDetails(string userId);
+        Task<Hub> GetHubWithDetails(long hubId, string userId);
     }
 }

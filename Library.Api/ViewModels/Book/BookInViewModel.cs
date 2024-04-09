@@ -1,13 +1,7 @@
-﻿
-using MyLibrary.Application.Dtos.Common;
-using MyLibrary.Application.Dtos.Resume;
-using MyLibrary.Domain.Models;
-
-namespace MyLibrary.Application.Dtos.Book
+﻿namespace MyLibrary.Api.ViewModels.Book
 {
-    public class GetBookDetailsDto
+    public class BookInViewModel
     {
-        public long BookId { get; set; }
         public string Title { get; set; }
         public string AuthorName { get; set; }
         public string Isbn { get; set; }
@@ -16,9 +10,24 @@ namespace MyLibrary.Application.Dtos.Book
         public string Image { get; set; }
         public int Order { get; set; }
         public int StatusId { get; set; }
-        public EnumerationDto Status { get; set; }
-        public GetResumeDetailsDto Resume { get; set; }
+    }
+
+
+
+    public class BookUpdateViewModel : BookInViewModel
+    {
+        public long BookId { get; set; }
+    }
+
+
+    public class BookViewModel : BookUpdateViewModel
+    {
 
     }
+
+
+
+
+
 
 }
