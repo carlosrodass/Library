@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using MyLibrary.Application.Dtos.Hub;
+using MyLibrary.Application.Dtos;
 using MyLibrary.Domain.Common;
 
 namespace MyLibrary.Application.Services.Abstract.HubService;

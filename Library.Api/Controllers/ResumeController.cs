@@ -2,10 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyLibrary.Application.Dtos.Resume;
-using MyLibrary.Application.Features.ResumeFeature.Commands.CreateResume;
-using MyLibrary.Application.Features.ResumeFeature.Commands.DeleteResume;
-using MyLibrary.Application.Features.ResumeFeature.Commands.UpdateResume;
-using MyLibrary.Application.Features.ResumeFeature.Queries.GetResumeDetails;
+
 
 namespace MyLibrary.Api.Controllers;
 
@@ -37,23 +34,16 @@ public class ResumeController : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<GetResumeDetailsDto>> GetResumeByBookIdAsync(long BookId)
     {
-        var result = await _mediator.Send(new GetResumeDetailsQuery(BookId));
-        if (result.IsFailure) { return BadRequest(result); }
-
-        return Ok(result);
+        throw new NotImplementedException(); 
     }
 
     [HttpPut("Create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> CreateAsync(CreateResumeCommand createResumeCommand)
+    public async Task<IActionResult> CreateAsync()
     {
-
-        var result = await _mediator.Send(createResumeCommand);
-        if (result.IsFailure) { return BadRequest(result); }
-
-        return Ok(result);
+        throw new NotImplementedException();
     }
 
 
@@ -61,13 +51,10 @@ public class ResumeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> UpdateAsync(UpdateResumeCommand updateResumeCommand)
+    public async Task<IActionResult> UpdateAsync()
     {
+        throw new NotImplementedException();
 
-        var result = await _mediator.Send(updateResumeCommand);
-        if (result.IsFailure) { return BadRequest(result); }
-
-        return Ok(result);
     }
 
     [HttpDelete("{ResumeId:long}")]
@@ -76,12 +63,7 @@ public class ResumeController : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult> DeleteAsync(long ResumeId)
     {
-        var command = new DeleteResumeCommand { ResumeId = ResumeId };
-
-        var result = await _mediator.Send(command);
-        if (result.IsFailure) { return BadRequest(result); }
-
-        return NoContent();
+        throw new NotImplementedException();
     }
 
     #endregion

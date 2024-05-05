@@ -3,7 +3,7 @@ using MyLibrary.Application.Dtos.BookHub;
 using MyLibrary.Application.Dtos.Common;
 using MyLibrary.Domain.Models;
 
-namespace MyLibrary.Application.Dtos.Hub;
+namespace MyLibrary.Application.Dtos;
 
 public class HubDto
 {

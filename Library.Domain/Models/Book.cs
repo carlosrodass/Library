@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using MyLibrary.Domain.Common;
 
+
 using System.Reflection.Metadata;
 
 namespace MyLibrary.Domain.Models
@@ -17,7 +18,7 @@ namespace MyLibrary.Domain.Models
         public int Order { get; set; }
         public Status Status { get; set; }
         public int StatusId { get; set; }
-        public Resume? Resume { get; set; }
+        public List<Resume> Resumes { get; set; }
         public List<Hub> Hubs { get; set; }
         public List<BookHub> BookHubs { get; set; }
 

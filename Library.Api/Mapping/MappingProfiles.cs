@@ -2,9 +2,9 @@
 using MyLibrary.Api.ViewModels.Book;
 using MyLibrary.Api.ViewModels.Common;
 using MyLibrary.Api.ViewModels.Hub;
+using MyLibrary.Application.Dtos;
 using MyLibrary.Application.Dtos.Book;
 using MyLibrary.Application.Dtos.Common;
-using MyLibrary.Application.Dtos.Hub;
 
 namespace MyLibrary.Api.Mapping;
 

@@ -14,13 +14,8 @@ namespace MyLibrary.Domain.Models
         public int ResumeTypeId { get; set; }
         public ResumeType ResumeType { get; set; }
         public long? BookId { get; set; }
-        public Book? Book { get; set; }
+        public Book Book { get; set; }
         public ICollection<KeyPoint> KeyPoints { get; set; }
-
-        //public override long GetEntityId()
-        //{
-        //    return ResumeId;
-        //}
 
     }
 }

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
-using MediatR;
 using MyLibrary.Application.Contracts.Persistence;
-using MyLibrary.Application.Dtos.Hub;
+using MyLibrary.Application.Dtos;
 using MyLibrary.Application.Services.Abstract.HubService;
 using MyLibrary.Domain.Common;
 using MyLibrary.Domain.Models;
+using Hub = MyLibrary.Domain.Models.Hub;
 
 namespace MyLibrary.Application.Services.Concrete.HubService;
 
@@ -49,14 +49,13 @@ internal sealed class HubService : IHubService
     public async Task<Result<HubDto, Error>> CreateAsync(HubDto hubDto)
     {
         //TODO: Check required fields
-
         Hub hub = new()
         {
             Name = hubDto.Name,
             Description = hubDto.Description,
             Image = hubDto.Image,
             StatusId = hubDto.StatusId,
-            UserId = hubDto.UserId
+            UserId = "e971878c-e3b4-471d-971b-dca461aae708"
         };
 
         await _hubRepository.CreateAsync(hub);
@@ -66,7 +65,18 @@ internal sealed class HubService : IHubService
     }
     public async Task<Result<HubDto, Error>> UpdateAsync(HubDto hubDto)
     {
-        throw new NotImplementedException();
+        bool isValidData = CheckUpdateHubData(hubDto);
+        if (!isValidData) { return CustomErrors.Hub.NotValid(); }
+
+        var hubFound = await GetHubById(hubDto.HubId, "Update");
+        if (hubFound.IsFailure) { return hubFound.Error; }
+
+        HubDataToUpdate(hubFound.Value, hubDto);
+
+        _hubRepository.Update(hubFound.Value);
+        await _hubRepository.SaveChangesAsync();
+
+        return _mapper.Map<HubDto>(hubFound.Value);
     }
     public async Task<Result<bool, Error>> DeleteAsync(long hubId)
     {
@@ -97,13 +107,29 @@ internal sealed class HubService : IHubService
 
     #region Private methods
 
-
-
     private async Task<Result<Hub, Error>> GetHubById(long hubId, string userId)
+
     {
         var hub = await _hubRepository.GetHubWithDetails(hubId, userId);
         if (hub == null) { return CustomErrors.Hub.NotFound(); }
         return hub;
+    }
+
+    private static void HubDataToUpdate(Hub hubFound, HubDto hubDto)
+    {
+        hubFound.Name = hubDto.Name;
+        hubFound.Description = hubDto.Description;
+    }
+
+    private static bool CheckUpdateHubData(HubDto hubDto)
+    {
+        if (hubDto == null) { return false; }
+
+        if (string.IsNullOrEmpty(hubDto.Name)) { return false; }
+
+        if (string.IsNullOrEmpty(hubDto.Description)) { return false; }
+
+        return true;
     }
 
 

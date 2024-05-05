@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyLibrary.Api.ViewModels.Hub;
-using MyLibrary.Application.Dtos.Hub;
+using MyLibrary.Application.Dtos;
 using MyLibrary.Application.Services.Abstract.HubService;
 
 
@@ -26,7 +26,6 @@ public class HubController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
     public async Task<ActionResult<List<HubViewModel>>> GetAllHubsAsync()
-
     {
         string userId = GetUserClaims();
         var result = await _hubService.GetAllHubsByUserIdAsync(userId);
@@ -63,19 +62,31 @@ public class HubController : ControllerBase
         return Ok(_mapper.Map<HubViewModel>(result.Value));
     }
 
+
+    [HttpPut()]
+    [ProducesResponseType(typeof(HubViewModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> UpdateAsync(HubUpdateViewModel hubUpdateViewModel)
+    {
+        var hubDto = _mapper.Map<HubDto>(hubUpdateViewModel);
+        var result = await _hubService.UpdateAsync(hubDto);
+        if (result.IsFailure) { return BadRequest(result); }
+
+        return Ok(_mapper.Map<HubViewModel>(result.Value));
+    }
+
+
+
     [HttpPut("AddBookToHub")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> AddBookToHubAsync()
+    public async Task<IActionResult> AddBookToHubAsync(long hubId, long bookId)
     {
-
-        //var result = await _mediator.Send(addBookToHubCommand);
-        //if (result.IsFailure) { return BadRequest(result); }
-
-        //return Ok(result);
-
-        throw new NotImplementedException();
+        var result = await _hubService.AddBookToHub(hubId, bookId, "e971878c-e3b4-471d-971b-dca461aae708");
+        if (result.IsFailure) { return BadRequest(result); }
+        return Ok(result);
     }
 
 

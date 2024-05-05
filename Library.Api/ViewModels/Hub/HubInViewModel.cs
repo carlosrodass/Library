@@ -1,7 +1,5 @@
 ﻿using MyLibrary.Api.ViewModels.Book;
 using MyLibrary.Api.ViewModels.Common;
-using MyLibrary.Application.Dtos.Book;
-using MyLibrary.Application.Dtos.Common;
 
 namespace MyLibrary.Api.ViewModels.Hub;
 

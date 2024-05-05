@@ -12,28 +12,27 @@ namespace MyLibrary.Application.Services.Concrete.BookService;
 
 internal sealed class BookService : IBookService
 {
+    #region Fields
     private readonly IMapper _mapper;
     private readonly IBookRepository _bookRepository;
-
+    #endregion
 
     #region Builder
-
     public BookService(IMapper mapper, IBookRepository bookRepository)
     {
         _mapper = mapper;
         _bookRepository = bookRepository;
     }
-
     #endregion
-
 
     #region Public methods
 
     public async Task<Result<BookDto, Error>> GetBookByIdAsync(long id)
     {
-        var result = await _bookRepository.GetByIdAsync(id);
-        if (result == null) { return Error.NotFound; }
-        return _mapper.Map<BookDto>(result);
+        var result = await GetBookById(id);
+        if (result.IsFailure) { return result.Error; }
+
+        return _mapper.Map<BookDto>(result.Value);
     }
     public async Task<Result<List<BookDto>, Error>> GetAllBooksByHubId(long hubId)
     {
@@ -63,7 +62,19 @@ internal sealed class BookService : IBookService
     }
     public async Task<Result<BookDto, Error>> UpdateAsync(BookDto bookDto)
     {
-        throw new NotImplementedException();
+        var resultBook = await GetBookById(bookDto.BookId);
+        if (resultBook.IsFailure) { return resultBook.Error; }
+
+        var isValidData = CheckBookDataToUpdate(bookDto);
+        if (isValidData.IsFailure) { return isValidData.Error; }
+
+        resultBook.Value.Title = bookDto.Title;
+        resultBook.Value.AuthorName = bookDto.AuthorName;
+
+        _bookRepository.Update(resultBook.Value);
+        await _bookRepository.SaveChangesAsync();
+
+        return _mapper.Map<BookDto>(resultBook.Value);
     }
     public async Task<Result<bool, Error>> DeleteAsync(long bookId)
     {
@@ -72,25 +83,28 @@ internal sealed class BookService : IBookService
 
     #endregion
 
-
     #region Private
 
-    private string RemoveLetters(string input)
+    private async Task<Result<Book, Error>> GetBookById(long id)
     {
-        //string result = "";  
-
-        //foreach (char c in input)
-        //{
-        //    if (!char.IsLetter(c))
-        //    {
-        //        result += c;
-        //    }
-        //}
-
-        return new string(input.Where(c => !char.IsLetter(c)).ToArray());
-
-        //return result;
+        var result = await _bookRepository.GetByIdAsync(id);
+        if (result == null) { return Error.NotFound; }
+        return result;
     }
+
+    private Result<bool, Error> CheckBookDataToUpdate(BookDto bookDto)
+    {
+        if (bookDto == null) { return CustomErrors.Book.NotFound(); }
+
+        if (string.IsNullOrEmpty(bookDto.Title)) { return CustomErrors.Book.NotValid(); }
+
+        if (string.IsNullOrEmpty(bookDto.AuthorName)) { return CustomErrors.Book.NotValid(); }
+
+        return true;
+    }
+
+
+
 
     #endregion
 }

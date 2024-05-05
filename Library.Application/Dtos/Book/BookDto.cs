@@ -1,7 +1,6 @@
 ﻿
 using MyLibrary.Application.Dtos.BookHub;
 using MyLibrary.Application.Dtos.Common;
-using MyLibrary.Application.Dtos.Hub;
 using MyLibrary.Application.Dtos.Resume;
 using MyLibrary.Domain.Models;
 
@@ -19,7 +18,7 @@ public class BookDto
     public int Order { get; set; }
     public EnumerationDto Status { get; set; }
     public int StatusId { get; set; }
-    //public ResumeDto? Resume { get; set; }
+    //public List<ResumeDto> Resumes { get; set; }
     //public List<HubDto> Hubs { get; set; }
     //public List<BookHubDto> BookHubs { get; set; }
 }

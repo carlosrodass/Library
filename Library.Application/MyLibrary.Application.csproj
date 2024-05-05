@@ -16,9 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Library.Domain\MyLibrary.Domain.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Features\MasterFeature\Queries\GetAllResumeType\" />
-  </ItemGroup>
 
 
 
