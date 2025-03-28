@@ -26,7 +26,13 @@ internal sealed class BookService : IBookService
     #endregion
 
     #region Public methods
+    public async Task<Result<List<BookDto>, Error>> GetAllBooks()
+    {
+        var result = await _bookRepository.GetAsync();
+        if (result == null) { return Error.NotFound; }
 
+        return _mapper.Map<List<BookDto>>(result);
+    }
     public async Task<Result<BookDto, Error>> GetBookByIdAsync(long id)
     {
         var result = await GetBookById(id);
@@ -43,17 +49,17 @@ internal sealed class BookService : IBookService
     }
     public async Task<Result<BookDto, Error>> CreateAsync(BookDto bookDto)
     {
-        Book book = new()
-        {
-            Title = bookDto.Title,
-            AuthorName = bookDto.AuthorName,
-            Isbn = bookDto.Isbn,
-            Price = bookDto.Price,
-            ReleaseDate = bookDto.ReleaseDate,
-            Image = bookDto.Image,
-            Order = bookDto.Order,
-            StatusId = bookDto.StatusId,
-        };
+        Book book = new();
+        book.Initialize(
+            bookDto.Title,
+            bookDto.AuthorName,
+            bookDto.Isbn,
+            bookDto.Price,
+            bookDto.ReleaseDate,
+            bookDto.Image,
+            bookDto.Order,
+            bookDto.StatusId
+        );
 
         await _bookRepository.CreateAsync(book);
         await _bookRepository.SaveChangesAsync();
@@ -63,13 +69,13 @@ internal sealed class BookService : IBookService
     public async Task<Result<BookDto, Error>> UpdateAsync(BookDto bookDto)
     {
         var resultBook = await GetBookById(bookDto.BookId);
+
         if (resultBook.IsFailure) { return resultBook.Error; }
 
         var isValidData = CheckBookDataToUpdate(bookDto);
         if (isValidData.IsFailure) { return isValidData.Error; }
 
-        resultBook.Value.Title = bookDto.Title;
-        resultBook.Value.AuthorName = bookDto.AuthorName;
+        resultBook = resultBook.Value.Update(bookDto.Title, bookDto.AuthorName);
 
         _bookRepository.Update(resultBook.Value);
         await _bookRepository.SaveChangesAsync();

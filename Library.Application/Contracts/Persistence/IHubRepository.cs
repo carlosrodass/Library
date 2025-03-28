@@ -11,5 +11,7 @@ namespace MyLibrary.Application.Contracts.Persistence
     {
         Task<List<Hub>> GetHubsWithDetails(string userId);
         Task<Hub> GetHubWithDetails(long hubId, string userId);
+
+        Task<Status> GetHubStatusById(long statusId);
     }
 }

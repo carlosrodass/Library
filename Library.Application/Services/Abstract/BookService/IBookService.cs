@@ -11,6 +11,7 @@ namespace MyLibrary.Application.Services.Abstract.BookService
 {
     public interface IBookService
     {
+        Task<Result<List<BookDto>, Error>> GetAllBooks();
         Task<Result<List<BookDto>, Error>> GetAllBooksByHubId(long hubId);
         Task<Result<BookDto, Error>> GetBookByIdAsync(long bookId);
         Task<Result<BookDto, Error>> CreateAsync(BookDto bookDto);

@@ -2,9 +2,12 @@
 using MyLibrary.Api.ViewModels.Book;
 using MyLibrary.Api.ViewModels.Common;
 using MyLibrary.Api.ViewModels.Hub;
+using MyLibrary.Api.ViewModels.Resumes;
 using MyLibrary.Application.Dtos;
 using MyLibrary.Application.Dtos.Book;
 using MyLibrary.Application.Dtos.Common;
+using MyLibrary.Application.Dtos.Resume;
+using MyLibrary.Domain.Models;
 
 namespace MyLibrary.Api.Mapping;
 
@@ -15,6 +18,7 @@ public class MappingProfiles : Profile
         CommonProfile();
         HubProfile();
         BookProfile();
+        ResumesProfile();
     }
 
 
@@ -34,5 +38,12 @@ public class MappingProfiles : Profile
         CreateMap<BookInViewModel, BookDto>();
         CreateMap<BookUpdateViewModel, BookDto>();
         CreateMap<BookDto, BookViewModel>();
+    }
+
+    private void ResumesProfile()
+    {
+        CreateMap<ResumesInViewModel, ResumeDto>();
+        CreateMap<ResumesUpdateViewModel, ResumeDto>();
+        CreateMap<ResumeDto, ResumesViewModel>();
     }
 }

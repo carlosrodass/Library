@@ -51,7 +51,13 @@ namespace MyLibrary.Application.Services.Concrete.ResumeService
             var bookFound = await _bookRepository.GetBookById(resumeDto.BookId.Value);
             if (bookFound == null) { return CustomErrors.Book.NotFound(); }
 
-            Resume resume = CreateResume(resumeDto);
+            Resume resume = new()
+            {
+                Title = resumeDto.Title,
+                Description = resumeDto.Description,
+                Content = resumeDto.Content,
+                ResumeTypeId = resumeDto.ResumeTypeId,
+            };
 
             await _resumeRepository.CreateAsync(resume);
             await _resumeRepository.SaveChangesAsync();
@@ -75,17 +81,6 @@ namespace MyLibrary.Application.Services.Concrete.ResumeService
 
 
         #region Private Methods
-
-        private static Resume CreateResume(ResumeDto resumeDto)
-        {
-            return new Resume()
-            {
-                Title = resumeDto.Title,
-                Description = resumeDto.Description,
-                Content = resumeDto.Content,
-                ResumeTypeId = resumeDto.ResumeTypeId,
-            };
-        }
 
         #endregion
 

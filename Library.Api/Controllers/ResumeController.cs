@@ -1,27 +1,32 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using CSharpFunctionalExtensions;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyLibrary.Api.ViewModels.Book;
+using MyLibrary.Api.ViewModels.Resumes;
 using MyLibrary.Application.Dtos.Resume;
+using MyLibrary.Application.Services.Abstract;
 
 
 namespace MyLibrary.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+//[Authorize]
 public class ResumeController : ControllerBase
 {
     #region Fields
-
-    private readonly IMediator _mediator;
-
+    private readonly IResumeService _resumeService;
+    private readonly IMapper _mapper;
     #endregion
 
     #region Builder
 
-    public ResumeController(IMediator mediator)
+    public ResumeController(IResumeService resumeService, IMapper mapper)
     {
-        this._mediator = mediator;
+        _resumeService = resumeService;
+        _mapper = mapper;
     }
 
     #endregion
@@ -34,16 +39,19 @@ public class ResumeController : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<GetResumeDetailsDto>> GetResumeByBookIdAsync(long BookId)
     {
-        throw new NotImplementedException(); 
+        throw new NotImplementedException();
     }
 
-    [HttpPut("Create")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [HttpPost("Create")]
+    [ProducesResponseType(typeof(ResumesViewModel), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
-    public async Task<IActionResult> CreateAsync()
+    public async Task<IActionResult> CreateAsync(ResumesInViewModel resumesInViewModel)
     {
-        throw new NotImplementedException();
+        ResumeDto resumeDto = _mapper.Map<ResumeDto>(resumesInViewModel);
+        var result = await _resumeService.CreateResumeAndAssignToBookAsync(resumeDto);
+        return Ok(_mapper.Map<ResumesViewModel>(result.Value));
+
     }
 
 

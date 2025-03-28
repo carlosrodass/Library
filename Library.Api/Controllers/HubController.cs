@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyLibrary.Api.ViewModels.Book;
 using MyLibrary.Api.ViewModels.Hub;
 using MyLibrary.Application.Dtos;
+using MyLibrary.Application.Dtos.Book;
 using MyLibrary.Application.Services.Abstract.HubService;
 
 
@@ -17,6 +20,7 @@ public class HubController : ControllerBase
     private readonly IMapper _mapper;
     public HubController(IHubService hubService, IMapper mapper)
     {
+
         _hubService = hubService;
         _mapper = mapper;
     }
@@ -47,12 +51,13 @@ public class HubController : ControllerBase
     }
 
 
-    [HttpPost()]
+    [HttpPost("CreateAsync")]
     [ProducesResponseType(typeof(HubViewModel), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
     public async Task<IActionResult> CreateAsync(HubInViewModel hubInViewModel)
     {
+
         string? userId = GetUserClaims();
         HubDto hubDto = _mapper.Map<HubDto>(hubInViewModel);
         hubDto.UserId = userId;
@@ -76,7 +81,39 @@ public class HubController : ControllerBase
         return Ok(_mapper.Map<HubViewModel>(result.Value));
     }
 
+    [HttpDelete("DeleteAsync/{hubId:long}")]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> DeleteAsync(int hubId)
+    {
+        try
+        {
 
+            var result = await _hubService.DeleteAsync(hubId);
+            if (result.IsFailure) { return BadRequest(result); }
+
+            return Ok(result.Value);
+        }
+        catch (Exception ex)
+        {
+            return Ok(false);
+        }
+    }
+
+    [HttpPost("CreateBookFromHub")]
+    [ProducesResponseType(typeof(BookViewModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesDefaultResponseType]
+    public async Task<IActionResult> CreateBookFromHub(BookInViewModel bookInViewModel)
+    {
+        BookDto bookDto = _mapper.Map<BookDto>(bookInViewModel);
+        var result = await _hubService.CreateBookFromHub(bookDto);
+        if (result.IsFailure) { return BadRequest(result); }
+
+        return Ok(_mapper.Map<BookViewModel>(result.Value));
+        
+    }
 
     [HttpPut("AddBookToHub")]
     [ProducesResponseType(StatusCodes.Status200OK)]

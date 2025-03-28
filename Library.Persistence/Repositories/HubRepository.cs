@@ -19,27 +19,25 @@ namespace MyLibrary.Persistence.Repositories
 
         public async Task<List<Hub>> GetHubsWithDetails(string userId)
         {
-            //return await _context.Hubs
-            //.Where(e => (e.UserId == userId && e.UserId != null) && !e.IsDeleted)
-            //.ToListAsync();
-
             return await _context.Hubs
                 .Where(e => !e.IsDeleted)
+                .Include(x => x.Status)
                 .ToListAsync();
         }
 
         public async Task<Hub> GetHubWithDetails(long hubId, string userId)
         {
-            //return await _context.Hubs
-            //            .Include(x => x.Books)
-            //            .Where(e => !e.IsDeleted && e.UserId == userId)
-            //            .FirstOrDefaultAsync(q => q.HubId == hubId);
-
             return await _context.Hubs
-            .Include(x => x.Books)
-            .Where(e => !e.IsDeleted)
-            .FirstOrDefaultAsync(q => q.HubId == hubId);
+            .Include(x => x.Books).ThenInclude(b => b.Resumes)
+            .Include(x => x.Status)
+            .FirstOrDefaultAsync(q => q.HubId == hubId && !q.IsDeleted);
 
         }
+
+        public async Task<Status> GetHubStatusById(long statusId)
+        {
+            return await _context.Status.FirstOrDefaultAsync(x => x.Id == statusId);
+        }
+
     }
 }

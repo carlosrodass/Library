@@ -17,8 +17,7 @@ public class BookRepository : GenericRepository<Book>, IBookRepository
     public async Task<List<Book>> GetBooksByHubId(long hubId)
     {
         var books = await _context.Books
-           .Include(q => q.Resumes)
-           .ThenInclude(q => q.KeyPoints)
+           .Include(q => q.Resumes).ThenInclude(q => q.KeyPoints)
            .Include(q => q.BookHubs)
            .Where(e => !e.IsDeleted && e.BookHubs.Any(x => x.HubId == hubId))
            .ToListAsync();

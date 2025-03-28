@@ -24,6 +24,23 @@ namespace MyLibrary.Api.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet()]
+        [ProducesResponseType(typeof(List<BookViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<List<BookViewModel>>> GetAllBooksAsync()
+         {
+            try
+            {
+                var result = await _bookService.GetAllBooks();
+                if (result.IsFailure) { return BadRequest(result); }
+                return Ok(_mapper.Map<List<BookViewModel>>(result.Value));
+            }
+            catch (Exception ex)
+            {
+                return new List<BookViewModel>();
+            }
+        }
 
         [HttpGet("GetAllByHub/{hubId:long}")]
         [ProducesResponseType(typeof(List<BookViewModel>), StatusCodes.Status200OK)]
@@ -57,8 +74,6 @@ namespace MyLibrary.Api.Controllers
         [ProducesDefaultResponseType]
         public async Task<IActionResult> CreateAsync(BookInViewModel bookInViewModel)
         {
-
-
             BookDto bookDto = _mapper.Map<BookDto>(bookInViewModel);
             var result = await _bookService.CreateAsync(bookDto);
             if (result.IsFailure) { return BadRequest(result); }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MyLibrary.Application.Services.Abstract;
 using MyLibrary.Application.Services.Abstract.BookService;
 using MyLibrary.Application.Services.Abstract.HubService;
 using MyLibrary.Application.Services.Concrete.BookService;
 using MyLibrary.Application.Services.Concrete.HubService;
+using MyLibrary.Application.Services.Concrete.ResumeService;
 using MyLibrary.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -25,6 +27,7 @@ namespace MyLibrary.Application
 
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IHubService, HubService>();
+            services.AddScoped<IResumeService, ResumeService>();
 
             return services;
         }

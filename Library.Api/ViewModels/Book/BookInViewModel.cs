@@ -10,6 +10,7 @@
         public string Image { get; set; }
         public int Order { get; set; }
         public int StatusId { get; set; }
+        public int? HubId { get; set; }
     }
 
 
@@ -22,7 +23,8 @@
 
     public class BookViewModel : BookUpdateViewModel
     {
-
+        public int NumberOfSummaries { get; set; }
+        public DateTime? DateModified { get; set; }
     }
 
 
