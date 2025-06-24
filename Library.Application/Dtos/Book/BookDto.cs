@@ -1,8 +1,5 @@
-﻿
-using MyLibrary.Application.Dtos.BookHub;
-using MyLibrary.Application.Dtos.Common;
+﻿using MyLibrary.Application.Dtos.Common;
 using MyLibrary.Application.Dtos.Resume;
-using MyLibrary.Domain.Models;
 
 namespace MyLibrary.Application.Dtos.Book;
 
@@ -21,6 +18,7 @@ public class BookDto
     public int StatusId { get; set; }
     public int NumberOfSummaries { get; set; }
     public int? HubId { get; set; }
+
     public List<ResumeDto> Resumes { get; set; }
     //public List<HubDto> Hubs { get; set; }
     //public List<BookHubDto> BookHubs { get; set; }

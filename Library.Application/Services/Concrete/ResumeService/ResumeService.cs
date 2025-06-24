@@ -79,7 +79,6 @@ namespace MyLibrary.Application.Services.Concrete.ResumeService
 
         #endregion
 
-
         #region Private Methods
 
         #endregion

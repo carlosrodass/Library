@@ -26,27 +26,5 @@ namespace MyLibrary.Domain.Models
 
         //public int UserId { get; set; }
 
-
-        public void Initialize(string title, string authorName, string isbn, long price, DateTime releaseDate, string image, int order, int statusId)
-        {
-            Title = title;
-            AuthorName = authorName;
-            Isbn = isbn;
-            Price = price;
-            ReleaseDate = releaseDate;
-            Image = image;
-            Order = order;
-            StatusId = statusId;
-        }
-
-        public Book Update(string title, string authorName)
-        {
-            Title = title;
-            AuthorName = authorName;
-
-            return this;
-        }
-
-
     }
 }

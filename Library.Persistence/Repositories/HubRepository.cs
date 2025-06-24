@@ -2,11 +2,7 @@
 using MyLibrary.Application.Contracts.Persistence;
 using MyLibrary.Domain.Models;
 using MyLibrary.Persistence.DataBaseContext;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace MyLibrary.Persistence.Repositories
 {
@@ -14,24 +10,40 @@ namespace MyLibrary.Persistence.Repositories
     {
         public HubRepository(LibraryDatabaseContext context) : base(context)
         {
-
         }
 
         public async Task<List<Hub>> GetHubsWithDetails(string userId)
         {
-            return await _context.Hubs
-                .Where(e => !e.IsDeleted)
-                .Include(x => x.Status)
-                .ToListAsync();
+            var query = from hub in _context.Hubs
+                        join status in _context.Status on hub.StatusId equals status.Id
+                        select new Hub
+                        {
+                            HubId = hub.HubId,
+                            Name = hub.Name,
+                            Description = hub.Description,
+                            Image = hub.Image,
+                            StatusId = status.Id,
+                            Status = status
+                        };
+
+
+            return await query.ToListAsync();
         }
 
-        public async Task<Hub> GetHubWithDetails(long hubId, string userId)
+        public Hub GetHubWithDetails(long hubId, string userId)
         {
-            return await _context.Hubs
-            .Include(x => x.Books).ThenInclude(b => b.Resumes)
-            .Include(x => x.Status)
-            .FirstOrDefaultAsync(q => q.HubId == hubId && !q.IsDeleted);
+            var result = (from h in _context.Hubs
+                          join status in _context.Status on h.StatusId equals status.Id
+                          where h.HubId == hubId
+                          select new Hub
+                          {
+                              HubId = h.HubId,
+                              Name = h.Name,
+                              Description = h.Description,
+                              StatusId = status.Id
+                          }).FirstOrDefault();
 
+            return result;
         }
 
         public async Task<Status> GetHubStatusById(long statusId)
@@ -39,5 +51,18 @@ namespace MyLibrary.Persistence.Repositories
             return await _context.Status.FirstOrDefaultAsync(x => x.Id == statusId);
         }
 
+        public async Task<bool> AddBookToHubAsync(BookHub bookHub)
+        {
+            try
+            {
+                _context.Set<BookHub>().Add(bookHub);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

@@ -3,10 +3,12 @@ using CSharpFunctionalExtensions;
 using MyLibrary.Application.Contracts.Persistence;
 using MyLibrary.Application.Dtos;
 using MyLibrary.Application.Dtos.Book;
+using MyLibrary.Application.Exceptions;
 using MyLibrary.Application.Services.Abstract.BookService;
 using MyLibrary.Application.Services.Abstract.HubService;
 using MyLibrary.Domain.Common;
 using MyLibrary.Domain.Models;
+using static MyLibrary.Domain.Common.CustomErrors;
 using Hub = MyLibrary.Domain.Models.Hub;
 
 namespace MyLibrary.Application.Services.Concrete.HubService;
@@ -56,20 +58,28 @@ internal sealed class HubService : IHubService
 
         return hubsDtoList;
     }
+
     public async Task<Result<HubDto, Error>> GetHubByIdAsync(long hubId, string userId)
     {
-        var hub = await GetHubById(hubId, userId);
+        var hub = GetHubById(hubId, userId);
         if (hub.IsFailure) { return hub.Error; }
 
         HubDto hubDto = _mapper.Map<HubDto>(hub.Value);
+
+        var resultAddBook = await SetBooksToHub(hubDto);
+        if (resultAddBook.IsFailure) { return resultAddBook.Error; }
 
         SetNumberOfSummaries(hubDto.Books);
 
         return hubDto;
     }
+
     public async Task<Result<HubDto, Error>> CreateAsync(HubDto hubDto)
     {
-        if (string.IsNullOrEmpty(hubDto.Name) || string.IsNullOrEmpty(hubDto.Description) || hubDto.StatusId == 0) { return CustomErrors.Hub.NotValid(); }
+        if (string.IsNullOrEmpty(hubDto.Name) || string.IsNullOrEmpty(hubDto.Description) || hubDto.StatusId == 0)
+        {
+            return CustomErrors.Hub.NotValid();
+        }
 
         Hub hub = new()
         {
@@ -85,114 +95,122 @@ internal sealed class HubService : IHubService
 
         return await GetHubByIdAsync(hub.HubId, "");
     }
+
     public async Task<Result<HubDto, Error>> UpdateAsync(HubDto hubDto)
     {
-        bool isValidData = CheckUpdateHubData(hubDto);
-        if (!isValidData) { return CustomErrors.Hub.NotValid(); }
-
-        var hubFound = await GetHubById(hubDto.HubId, "Update");
-        if (hubFound.IsFailure) { return hubFound.Error; }
-
-        SetHubDataToUpdate(hubFound.Value, hubDto);
-
-        _hubRepository.Update(hubFound.Value);
-        await _hubRepository.SaveChangesAsync();
-
-        var myHubToSend = _mapper.Map<HubDto>(hubFound.Value);
-        await SetStatusToHubDto(hubFound.Value.StatusId, myHubToSend);
-
-        return myHubToSend;
-
+        throw new NotImplementedException();
+        // bool isValidData = CheckUpdateHubData(hubDto);
+        // if (!isValidData)
+        // {
+        //     return CustomErrors.Hub.NotValid();
+        // }
+        //
+        // var hubFound = GetHubById(hubDto.HubId, "Update");
+        // if (hubFound.IsFailure)
+        // {
+        //     return hubFound.Error;
+        // }
+        //
+        // SetHubDataToUpdate(hubFound.Value, hubDto);
+        //
+        // _hubRepository.Update(hubFound.Value);
+        // await _hubRepository.SaveChangesAsync();
+        //
+        // var myHubToSend = _mapper.Map<HubDto>(hubFound.Value);
+        // await SetStatusToHubDto(hubFound.Value.StatusId, myHubToSend);
+        //
+        // return myHubToSend;
     }
+
     public async Task<Result<bool, Error>> DeleteAsync(long hubId)
     {
-        var hubResult = await GetHubById(hubId, "");
-        if (hubResult.IsFailure) { return hubResult.Error; }
-
-        if (hubResult.Value.BookHubs != null && hubResult.Value.BookHubs.Any())
-        {
-            hubResult.Value.BookHubs = hubResult.Value.BookHubs = null;
-
-
-            _hubRepository.Update(hubResult.Value);
-            await _hubRepository.SaveChangesAsync();
-
-        }
-
-        _hubRepository.Delete(hubResult.Value);
-        await _hubRepository.SaveChangesAsync();
+        // var hubResult = GetHubById(hubId, "");
+        // if (hubResult.IsFailure)
+        // {
+        //     return hubResult.Error;
+        // }
+        //
+        // if (hubResult.Value.BookHubs != null && hubResult.Value.BookHubs.Any())
+        // {
+        //     hubResult.Value.BookHubs = hubResult.Value.BookHubs = null;
+        //
+        //
+        //     _hubRepository.Update(hubResult.Value);
+        //     await _hubRepository.SaveChangesAsync();
+        // }
+        //
+        // _hubRepository.Delete(hubResult.Value);
+        // await _hubRepository.SaveChangesAsync();
 
         return true;
-
     }
+
     public async Task<Result<BookDto, Error>> CreateBookFromHub(BookDto bookDto)
     {
         var bookCreatedResult = await _bookService.CreateAsync(bookDto);
-        if (bookCreatedResult.IsFailure) { return bookCreatedResult.Error; }
+        if (bookCreatedResult.IsFailure)
+        {
+            return bookCreatedResult.Error;
+        }
 
         var resultAddBookToHub = await AddBookToHub(bookDto.HubId.Value, bookCreatedResult.Value.BookId, "");
-        if (resultAddBookToHub.IsFailure) { return resultAddBookToHub.Error; }
+        if (resultAddBookToHub.IsFailure)
+        {
+            return resultAddBookToHub.Error;
+        }
 
         return bookCreatedResult.Value;
-
-
     }
+
     public async Task<Result<bool, Error>> AddBookToHub(long hubId, long bookId, string userId)
     {
-        var hub = await GetHubById(hubId, userId);
-        if (hub.IsFailure) { return Error.NotFound; }
+        var hubResult = GetHubById(hubId, userId);
+        if (hubResult.IsFailure)
+        {
+            return Error.NotFound;
+        }
 
-        if (hub.Value.Books.Any(x => x.BookId == bookId)) { return Error.AlreadyExist; }
+        if (hubResult.Value.Books != null && hubResult.Value.Books.Any(x => x.BookId == bookId))
+        {
+            return Error.AlreadyExist;
+        }
 
         var book = await _bookService.GetBookByIdAsync(bookId);
-        if (book.IsFailure) { return book.Error; }
+        if (book.IsFailure)
+        {
+            return book.Error;
+        }
 
         BookHub bookHub = new()
         {
-            BookId = book.Value.BookId,
-            HubId = hub.Value.HubId
+            BookId = bookId,
+            HubId = hubId
         };
 
-        if(hub.Value.BookHubs == null)
+        if (hubResult.Value.BookHubs == null)
         {
-            hub.Value.BookHubs = new List<BookHub>();
+            hubResult.Value.BookHubs = new List<BookHub>();
         }
 
-        hub.Value.BookHubs.Add(bookHub);
-        await _hubRepository.SaveChangesAsync();
+        var resultAddBook = await _hubRepository.AddBookToHubAsync(bookHub);
+        if (resultAddBook == false) { return Error.AlreadyExist; }
+
         return true;
     }
+
     #endregion
 
     #region Private methods
 
-
-    private async Task<Result<Hub, Error>> GetHubById(long hubId, string userId)
-
+    private Result<Hub, Error> GetHubById(long hubId, string userId)
     {
-        var hub = await _hubRepository.GetHubWithDetails(hubId, userId);
-        if (hub == null) { return CustomErrors.Hub.NotFound(); }
+        var hub = _hubRepository.GetHubWithDetails(hubId, userId);
+        if (hub == null)
+        {
+            return CustomErrors.Hub.NotFound();
+        }
+
         return hub;
-    }
-
-    private void SetHubDataToUpdate(Hub hubFound, HubDto hubDto)
-    {
-        hubFound.Name = hubDto.Name;
-        hubFound.Description = hubDto.Description;
-        hubFound.Image = hubDto.Image;
-        hubFound.StatusId = hubDto.StatusId;
-
-    }
-
-    private static bool CheckUpdateHubData(HubDto hubDto)
-    {
-        if (hubDto == null) { return false; }
-
-        if (string.IsNullOrEmpty(hubDto.Name)) { return false; }
-
-        if (string.IsNullOrEmpty(hubDto.Description)) { return false; }
-
-        return true;
     }
 
     private static void SetNumberOfSummaries(List<BookDto> books)
@@ -200,14 +218,22 @@ internal sealed class HubService : IHubService
         books.ToList().ForEach(book => book.NumberOfSummaries = book.Resumes.Count);
     }
 
-    private async Task SetStatusToHubDto(long statusIdToSearch, HubDto myHubToSend)
+    private async Task<Result<bool, Error>> SetBooksToHub(HubDto hubDto)
     {
-        var status = await _hubRepository.GetHubStatusById(statusIdToSearch);
-        myHubToSend.Status = new();
-        myHubToSend.Status.Id = status.Id;
-        myHubToSend.Status.Name = status.Name;
-    }
+        var booksListResult = await _bookService.GetAllBooksByHubId(hubDto.HubId);
 
+        if (booksListResult.IsFailure)
+        {
+            return booksListResult.Error;
+        }
+
+        if (booksListResult.Value.Count > 0)
+        {
+            hubDto.Books.AddRange(booksListResult.Value);
+        }
+
+        return true;
+    }
 
     #endregion
 }

@@ -10,8 +10,10 @@ namespace MyLibrary.Application.Contracts.Persistence
     public interface IHubRepository : IGenericRepository<Hub>
     {
         Task<List<Hub>> GetHubsWithDetails(string userId);
-        Task<Hub> GetHubWithDetails(long hubId, string userId);
+        Hub GetHubWithDetails(long hubId, string userId);
 
         Task<Status> GetHubStatusById(long statusId);
+
+        Task<bool> AddBookToHubAsync(BookHub bookHub);
     }
 }

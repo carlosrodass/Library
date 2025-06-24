@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using CSharpFunctionalExtensions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyLibrary.Api.ViewModels.Book;
 using MyLibrary.Api.ViewModels.Hub;
@@ -44,6 +42,7 @@ public class HubController : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<HubViewModel>> GetByIdAsync(long hubId)
     {
+
         string? userId = GetUserClaims();
         var result = await _hubService.GetHubByIdAsync(hubId, userId);
         if (result.IsFailure) { return BadRequest(result); }
@@ -63,6 +62,7 @@ public class HubController : ControllerBase
         hubDto.UserId = userId;
         var result = await _hubService.CreateAsync(hubDto);
         if (result.IsFailure) { return BadRequest(result); }
+
 
         return Ok(_mapper.Map<HubViewModel>(result.Value));
     }
@@ -129,6 +129,7 @@ public class HubController : ControllerBase
 
     #region Private
 
+    //Deberia ser asul
     private string? GetUserClaims()
     {
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "uid");

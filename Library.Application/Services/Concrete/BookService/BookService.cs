@@ -49,23 +49,12 @@ internal sealed class BookService : IBookService
     }
     public async Task<Result<BookDto, Error>> CreateAsync(BookDto bookDto)
     {
-        Book book = new();
-        book.Initialize(
-            bookDto.Title,
-            bookDto.AuthorName,
-            bookDto.Isbn,
-            bookDto.Price,
-            bookDto.ReleaseDate,
-            bookDto.Image,
-            bookDto.Order,
-            bookDto.StatusId
-        );
-
+        Book book = CreateBookEntity(bookDto);
         await _bookRepository.CreateAsync(book);
         await _bookRepository.SaveChangesAsync();
-
         return _mapper.Map<BookDto>(book);
     }
+
     public async Task<Result<BookDto, Error>> UpdateAsync(BookDto bookDto)
     {
         var resultBook = await GetBookById(bookDto.BookId);
@@ -75,7 +64,8 @@ internal sealed class BookService : IBookService
         var isValidData = CheckBookDataToUpdate(bookDto);
         if (isValidData.IsFailure) { return isValidData.Error; }
 
-        resultBook = resultBook.Value.Update(bookDto.Title, bookDto.AuthorName);
+        resultBook.Value.Title = bookDto.Title;
+        resultBook.Value.AuthorName = bookDto.AuthorName;
 
         _bookRepository.Update(resultBook.Value);
         await _bookRepository.SaveChangesAsync();
@@ -91,13 +81,26 @@ internal sealed class BookService : IBookService
 
     #region Private
 
+    private Book CreateBookEntity(BookDto bookDto)
+    {
+        return new Book()
+        {
+            Title = bookDto.Title,
+            AuthorName = bookDto.AuthorName,
+            Isbn = bookDto.Isbn,
+            Price = bookDto.Price,
+            ReleaseDate = bookDto.ReleaseDate,
+            Image = bookDto.Image,
+            Order = bookDto.Order,
+            StatusId = bookDto.StatusId
+        };
+    }
     private async Task<Result<Book, Error>> GetBookById(long id)
     {
         var result = await _bookRepository.GetByIdAsync(id);
         if (result == null) { return Error.NotFound; }
         return result;
     }
-
     private Result<bool, Error> CheckBookDataToUpdate(BookDto bookDto)
     {
         if (bookDto == null) { return CustomErrors.Book.NotFound(); }
@@ -108,9 +111,6 @@ internal sealed class BookService : IBookService
 
         return true;
     }
-
-
-
 
     #endregion
 }
