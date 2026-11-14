@@ -7,7 +7,7 @@ namespace MyLibrary.Application.Contracts.Persistence
     {
         Task<List<Book>> GetBooksByHubId(long hubId);
         Task<Book> GetBookWithDetails(long id);
-        Task<Book> GetBookById(long id);
+        Task<bool> CheckBookExistById(long id);
     }
 
 

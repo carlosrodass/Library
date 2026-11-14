@@ -15,6 +15,9 @@ namespace MyLibrary.Persistence.Configuration
         {
             builder.HasKey(e => e.ResumeId);
 
+            builder.Property(e => e.ResumeId)
+                .ValueGeneratedOnAdd();
+
             builder.HasQueryFilter(x => x.IsDeleted == false);
 
 

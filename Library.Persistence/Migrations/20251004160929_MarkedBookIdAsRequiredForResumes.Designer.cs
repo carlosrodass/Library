@@ -12,8 +12,8 @@ using MyLibrary.Persistence.DataBaseContext;
 namespace MyLibrary.Persistence.Migrations
 {
     [DbContext(typeof(LibraryDatabaseContext))]
-    [Migration("20240504155712_AddListOfResumesToBooks")]
-    partial class AddListOfResumesToBooks
+    [Migration("20251004160929_MarkedBookIdAsRequiredForResumes")]
+    partial class MarkedBookIdAsRequiredForResumes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -100,7 +100,7 @@ namespace MyLibrary.Persistence.Migrations
 
                     b.HasIndex("HubId");
 
-                    b.ToTable("BookHub");
+                    b.ToTable("BookHubs");
                 });
 
             modelBuilder.Entity("MyLibrary.Domain.Models.Hub", b =>
@@ -121,9 +121,6 @@ namespace MyLibrary.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -184,9 +181,12 @@ namespace MyLibrary.Persistence.Migrations
             modelBuilder.Entity("MyLibrary.Domain.Models.Resume", b =>
                 {
                     b.Property<long>("ResumeId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("BookId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ResumeId"));
+
+                    b.Property<long>("BookId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Content")
@@ -214,6 +214,8 @@ namespace MyLibrary.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ResumeId");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("ResumeTypeId");
 
@@ -330,7 +332,7 @@ namespace MyLibrary.Persistence.Migrations
                 {
                     b.HasOne("MyLibrary.Domain.Models.Book", "Book")
                         .WithMany("Resumes")
-                        .HasForeignKey("ResumeId")
+                        .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MyLibrary.Domain.Models.ResumeType", "ResumeType")

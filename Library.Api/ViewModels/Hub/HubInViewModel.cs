@@ -7,7 +7,6 @@ public class HubInViewModel
 {
     public string Name { get; set; }
     public string Description { get; set; }
-    public string? Image { get; set; }
     public int StatusId { get; set; }
 
 
@@ -22,5 +21,6 @@ public class HubViewModel : HubUpdateViewModel
 {
     public EnumerationViewModel Status { get; set; }
     public List<BookViewModel> Books { get; set; }
+    public int NumOfBooks { get; set; }
     //public List<BookHubDto> BookHubs { get; set; }
 }

@@ -14,7 +14,7 @@ public class ResumeDto
     public string Content { get; set; }
     public int ResumeTypeId { get; set; }
     public EnumerationDto ResumeType { get; set; }
-    public long? BookId { get; set; }
+    public long BookId { get; set; }
     //public BookDto Book { get; set; }
     //public ICollection<KeyPointDto> KeyPoints { get; set; }
 }

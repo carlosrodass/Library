@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyLibrary.Api.ViewModels.Book;
 using MyLibrary.Api.ViewModels.Hub;
@@ -29,8 +30,8 @@ public class HubController : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<List<HubViewModel>>> GetAllHubsAsync()
     {
-        string userId = GetUserClaims();
-        var result = await _hubService.GetAllHubsByUserIdAsync(userId);
+        //string userId = GetUserClaims();
+        var result = await _hubService.GetAllHubsByUserIdAsync("");
         if (result.IsFailure) { return BadRequest(result); }
 
         return Ok(_mapper.Map<List<HubViewModel>>(result.Value));
@@ -42,11 +43,18 @@ public class HubController : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<HubViewModel>> GetByIdAsync(long hubId)
     {
+        try
+        {
+            string? userId = GetUserClaims();
+            var result = await _hubService.GetHubByIdAsync(hubId, userId);
+            if (result.IsFailure) { return BadRequest(result); }
+            return Ok(_mapper.Map<HubViewModel>(result.Value));
 
-        string? userId = GetUserClaims();
-        var result = await _hubService.GetHubByIdAsync(hubId, userId);
-        if (result.IsFailure) { return BadRequest(result); }
-        return Ok(_mapper.Map<HubViewModel>(result.Value));
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
     }
 
 
@@ -112,7 +120,7 @@ public class HubController : ControllerBase
         if (result.IsFailure) { return BadRequest(result); }
 
         return Ok(_mapper.Map<BookViewModel>(result.Value));
-        
+
     }
 
     [HttpPut("AddBookToHub")]

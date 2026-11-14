@@ -8,7 +8,7 @@ namespace MyLibrary.Api.ViewModels.Resumes
         public string Description { get; set; }
         public string Content { get; set; }
         public int ResumeTypeId { get; set; }
-        public long? BookId { get; set; }
+        public long BookId { get; set; }
     }
 
     public class ResumesUpdateViewModel : ResumesInViewModel

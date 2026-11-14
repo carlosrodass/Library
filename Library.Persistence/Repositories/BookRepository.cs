@@ -16,11 +16,13 @@ public class BookRepository : GenericRepository<Book>, IBookRepository
 
     public async Task<List<Book>> GetBooksByHubId(long hubId)
     {
-        var books = await _context.Books
-           .Include(q => q.Resumes).ThenInclude(q => q.KeyPoints)
-           .Include(q => q.BookHubs)
-           .Where(e => !e.IsDeleted && e.BookHubs.Any(x => x.HubId == hubId))
-           .ToListAsync();
+        var books = await (
+          from b in _context.Books
+          join bh in _context.BookHubs on b.BookId equals bh.BookId
+          where !b.IsDeleted && bh.HubId == hubId
+          select b).Distinct().ToListAsync();
+
+
 
         return books;
     }
@@ -35,15 +37,12 @@ public class BookRepository : GenericRepository<Book>, IBookRepository
         return book;
     }
 
-    public async Task<Book> GetBookById(long id)
+    public async Task<bool> CheckBookExistById(long id)
     {
-        var book = await _context.Books
-           .Include(q => q.Resumes)
-                .ThenInclude(q => q.KeyPoints)
-                .Where(e => !e.IsDeleted)
-        .FirstOrDefaultAsync(q => q.BookId == id);
+        var IsbookInDb = await _context.Books.Include(b => b.Resumes).Where(e => !e.IsDeleted)
+        .AnyAsync(q => q.BookId == id);
 
-        return book;
+        return IsbookInDb;
     }
 
 

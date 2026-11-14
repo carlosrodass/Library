@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MyLibrary.Application.Contracts;
 using MyLibrary.Application.Contracts.Identity;
@@ -53,6 +54,22 @@ namespace MyLibrary.Identity
                     ValidIssuer = configuration["JwtSettings:Issuer"],
                     ValidAudience = configuration["JwtSettings:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:key"]))
+                };
+
+
+                o.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        // 📌 BREAKPOINT AQUÍ para ver el motivo del fallo
+                        Console.WriteLine("Error de autenticación: " + context.Exception.Message);
+                        return Task.CompletedTask;
+                    },
+                    OnChallenge = context =>
+                    {
+                        // 📌 BREAKPOINT AQUÍ para ver por qué se envía 401
+                        return Task.CompletedTask;
+                    }
                 };
             });
 

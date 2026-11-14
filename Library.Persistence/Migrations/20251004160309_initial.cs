@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MyLibrary.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -68,10 +68,37 @@ namespace MyLibrary.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Hubs",
+                columns: table => new
+                {
+                    HubId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StatusId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Hubs", x => x.HubId);
+                    table.ForeignKey(
+                        name: "FK_Hubs_Status_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Status",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Resumes",
                 columns: table => new
                 {
-                    ResumeId = table.Column<long>(type: "bigint", nullable: false),
+                    ResumeId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -86,17 +113,44 @@ namespace MyLibrary.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Resumes", x => x.ResumeId);
                     table.ForeignKey(
-                        name: "FK_Resumes_Books_ResumeId",
-                        column: x => x.ResumeId,
+                        name: "FK_Resumes_Books_BookId",
+                        column: x => x.BookId,
                         principalTable: "Books",
-                        principalColumn: "BookId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "BookId");
                     table.ForeignKey(
                         name: "FK_Resumes_ResumeTypes_ResumeTypeId",
                         column: x => x.ResumeTypeId,
                         principalTable: "ResumeTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookHubs",
+                columns: table => new
+                {
+                    BookId = table.Column<long>(type: "bigint", nullable: false),
+                    HubId = table.Column<long>(type: "bigint", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookHubs", x => new { x.BookId, x.HubId });
+                    table.ForeignKey(
+                        name: "FK_BookHubs_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "BookId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BookHubs_Hubs_HubId",
+                        column: x => x.HubId,
+                        principalTable: "Hubs",
+                        principalColumn: "HubId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -143,14 +197,29 @@ namespace MyLibrary.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_BookHubs_HubId",
+                table: "BookHubs",
+                column: "HubId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Books_StatusId",
                 table: "Books",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Hubs_StatusId",
+                table: "Hubs",
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_KeyPoints_ResumeId",
                 table: "KeyPoints",
                 column: "ResumeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Resumes_BookId",
+                table: "Resumes",
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Resumes_ResumeTypeId",
@@ -162,7 +231,13 @@ namespace MyLibrary.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "BookHubs");
+
+            migrationBuilder.DropTable(
                 name: "KeyPoints");
+
+            migrationBuilder.DropTable(
+                name: "Hubs");
 
             migrationBuilder.DropTable(
                 name: "Resumes");

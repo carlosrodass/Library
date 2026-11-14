@@ -48,9 +48,17 @@ public class ResumeController : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<IActionResult> CreateAsync(ResumesInViewModel resumesInViewModel)
     {
-        ResumeDto resumeDto = _mapper.Map<ResumeDto>(resumesInViewModel);
-        var result = await _resumeService.CreateResumeAndAssignToBookAsync(resumeDto);
-        return Ok(_mapper.Map<ResumesViewModel>(result.Value));
+        try
+        {
+            ResumeDto resumeDto = _mapper.Map<ResumeDto>(resumesInViewModel);
+            var result = await _resumeService.CreateResumeAndAssignToBookAsync(resumeDto);
+            return Ok(_mapper.Map<ResumesViewModel>(result.Value));
+        }
+        catch (Exception ex)
+        {
+
+            throw ex;
+        }
 
     }
 

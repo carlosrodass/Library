@@ -19,7 +19,7 @@ namespace MyLibrary.Persistence.Configuration
 
             builder.HasMany(x => x.Resumes)
                 .WithOne(x => x.Book)
-                .HasForeignKey(x => x.ResumeId)
+                .HasForeignKey(x => x.BookId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyLibrary.Application.Contracts.Persistence;
+using MyLibrary.Application.Dtos;
 using MyLibrary.Domain.Models;
 using MyLibrary.Persistence.DataBaseContext;
 
@@ -12,27 +13,27 @@ namespace MyLibrary.Persistence.Repositories
         {
         }
 
-        public async Task<List<Hub>> GetHubsWithDetails(string userId)
+        public async Task<List<HubDto>> GetHubsWithDetails(string userId)
         {
             var query = from hub in _context.Hubs
                         join status in _context.Status on hub.StatusId equals status.Id
-                        select new Hub
+                        select new HubDto
                         {
                             HubId = hub.HubId,
                             Name = hub.Name,
                             Description = hub.Description,
-                            Image = hub.Image,
                             StatusId = status.Id,
-                            Status = status
+                            //NumOfBooks = hub.BookHubs.Count()
+                            NumOfBooks = 0
                         };
 
 
             return await query.ToListAsync();
         }
 
-        public Hub GetHubWithDetails(long hubId, string userId)
+        public async Task<Hub> GetHubWithDetails(long hubId, string userId)
         {
-            var result = (from h in _context.Hubs
+            return await (from h in _context.Hubs
                           join status in _context.Status on h.StatusId equals status.Id
                           where h.HubId == hubId
                           select new Hub
@@ -41,9 +42,19 @@ namespace MyLibrary.Persistence.Repositories
                               Name = h.Name,
                               Description = h.Description,
                               StatusId = status.Id
-                          }).FirstOrDefault();
+                          }).FirstOrDefaultAsync();
 
-            return result;
+
+        }
+
+        public async Task<List<BookHub>> GetBookHubByHubId(long hubId)
+        {
+            var query = _context.BookHubs
+              .Where(bh => bh.HubId == hubId)
+              .Include(bh => bh.Book)
+              .ToList();
+
+            return query;
         }
 
         public async Task<Status> GetHubStatusById(long statusId)

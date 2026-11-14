@@ -27,6 +27,8 @@ namespace MyLibrary.Persistence.DataBaseContext
         public DbSet<ResumeType> ResumeTypes { get; set; }
         public DbSet<Status> Status { get; set; }
 
+        public DbSet<BookHub> BookHubs { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

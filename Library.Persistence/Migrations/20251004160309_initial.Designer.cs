@@ -12,8 +12,8 @@ using MyLibrary.Persistence.DataBaseContext;
 namespace MyLibrary.Persistence.Migrations
 {
     [DbContext(typeof(LibraryDatabaseContext))]
-    [Migration("20240228173803_AddingHubTableAndRelationWithBooks")]
-    partial class AddingHubTableAndRelationWithBooks
+    [Migration("20251004160309_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -100,7 +100,7 @@ namespace MyLibrary.Persistence.Migrations
 
                     b.HasIndex("HubId");
 
-                    b.ToTable("BookHub");
+                    b.ToTable("BookHubs");
                 });
 
             modelBuilder.Entity("MyLibrary.Domain.Models.Hub", b =>
@@ -123,9 +123,6 @@ namespace MyLibrary.Persistence.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -134,6 +131,9 @@ namespace MyLibrary.Persistence.Migrations
 
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("HubId");
 
@@ -181,7 +181,10 @@ namespace MyLibrary.Persistence.Migrations
             modelBuilder.Entity("MyLibrary.Domain.Models.Resume", b =>
                 {
                     b.Property<long>("ResumeId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ResumeId"));
 
                     b.Property<long?>("BookId")
                         .HasColumnType("bigint");
@@ -211,6 +214,8 @@ namespace MyLibrary.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ResumeId");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("ResumeTypeId");
 
@@ -326,9 +331,9 @@ namespace MyLibrary.Persistence.Migrations
             modelBuilder.Entity("MyLibrary.Domain.Models.Resume", b =>
                 {
                     b.HasOne("MyLibrary.Domain.Models.Book", "Book")
-                        .WithOne("Resume")
-                        .HasForeignKey("MyLibrary.Domain.Models.Resume", "ResumeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany("Resumes")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MyLibrary.Domain.Models.ResumeType", "ResumeType")
                         .WithMany()
@@ -345,7 +350,7 @@ namespace MyLibrary.Persistence.Migrations
                 {
                     b.Navigation("BookHubs");
 
-                    b.Navigation("Resume");
+                    b.Navigation("Resumes");
                 });
 
             modelBuilder.Entity("MyLibrary.Domain.Models.Hub", b =>

@@ -48,27 +48,18 @@ namespace MyLibrary.Application.Services.Concrete.ResumeService
 
         public async Task<Result<ResumeDto, Error>> CreateResumeAndAssignToBookAsync(ResumeDto resumeDto)
         {
-            var bookFound = await _bookRepository.GetBookById(resumeDto.BookId.Value);
-            if (bookFound == null) { return CustomErrors.Book.NotFound(); }
+            var bookFound = await _bookRepository.CheckBookExistById(resumeDto.BookId);
+            if (!bookFound) { return CustomErrors.Book.NotFound(); }
 
-            Resume resume = new()
-            {
-                Title = resumeDto.Title,
-                Description = resumeDto.Description,
-                Content = resumeDto.Content,
-                ResumeTypeId = resumeDto.ResumeTypeId,
-            };
+            Resume resume = FillResumeEntityByDto(resumeDto);
 
             await _resumeRepository.CreateAsync(resume);
             await _resumeRepository.SaveChangesAsync();
 
-            bookFound.Resumes.Add(resume);
-
-            _bookRepository.Update(bookFound);
-            await _bookRepository.SaveChangesAsync();
-
-            return _mapper.Map<ResumeDto>(resume);
+            return ReturnMappedObjectToDto(resume);
         }
+
+
 
         public async Task<Result<ResumeDto, Error>> UpdateResumeAsync(ResumeDto resumeDto)
         {
@@ -80,6 +71,30 @@ namespace MyLibrary.Application.Services.Concrete.ResumeService
         #endregion
 
         #region Private Methods
+        private Result<ResumeDto, Error> ReturnMappedObjectToDto(Resume resume)
+        {
+            return new ResumeDto
+            {
+                ResumeId = resume.ResumeId,
+                Title = resume.Title,
+                Description = resume.Description,
+                Content = resume.Content,
+                ResumeTypeId = resume.ResumeTypeId,
+                BookId = resume.BookId
+            };
+        }
+
+        private Resume FillResumeEntityByDto(ResumeDto resumeDto)
+        {
+            return new Resume()
+            {
+                Title = resumeDto.Title,
+                Description = resumeDto.Description,
+                Content = resumeDto.Content,
+                ResumeTypeId = resumeDto.ResumeTypeId,
+                BookId = resumeDto.BookId
+            };
+        }
 
         #endregion
 
